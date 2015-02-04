@@ -1,0 +1,135 @@
+/** Add css rules here for your application. */
+/** Example rules used by the template application (remove for your app) */
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
+}
+
+.gwt-Button {
+	display: block;
+	font-size: 16pt;
+	padding: 5px 7px;
+}
+
+.Boton-marco{
+	text-align: center;
+	width: 35px;
+	height: 15px;
+	font-size: 12pt;
+	padding: 7px 7px;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #a0a0a0;
+	border-radius: 3px;
+	display: block;
+	margin: 0;
+}
+
+
+.Boton-ocupado {
+	height: 12px;
+	display: block;
+	margin: 0;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #a0a0a0;
+	border-radius: 3px;
+	font-size: 16pt;
+	background-color: #FF0000;
+	padding: 7px 7px;
+	width: 35px;
+	
+}
+
+
+.Boton-ocupado-down {
+	background-color: #B12020;
+}
+
+.Boton-ocupado-down-hovering {
+	background-color: #B12020;
+}
+
+.Boton-ocupado-up-hovering {
+	background-color: #FF0000;
+}
+
+.Boton-ocupado-nulo {
+	height: 12px;
+	display: block;
+	margin: 0;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #a0a0a0;
+	border-radius: 3px;
+	font-size: 16pt;
+	background-color: #FF0000;
+	padding: 7px 7px;
+	width: 35px;
+	
+}
+.Text-Box {
+	padding: 5px 4px;
+	border: 1px solid #ccc;
+	border-top: 1px solid #999;
+	font-size: small;
+	font-family: Arial Unicode MS, Arial, sans-serif;
+	border-radius: 10px;
+}
+
+.Text-Box-vacio {
+	background: #F59595;
+	padding: 5px 4px;
+	border: 1px solid #ccc;
+	border-top: 1px solid #999;
+	font-size: small;
+	font-family: Arial Unicode MS, Arial, sans-serif;
+	border-radius: 10px;
+}
+
+.Boton-disponible {
+	height: 12px;
+	display: block;
+	margin: 0;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #a0a0a0;
+	border-radius: 3px;
+	font-size: 16pt;
+	background-color: #51FD00;
+	padding: 7px 7px;
+	width: 35px;
+}
+
+
+.Boton-disponible-down {
+	background-color: #53A82B;
+}
+
+.Boton-disponible-down-hovering {
+	background-color: #53A82B;
+}
+
+.Boton-disponible-up-hovering {
+	background-color: #51FD00;
+}
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+	width: 400px;
+}
+
+.dialogVPanel {
+	margin: 5 px;
+}
+
+.serverResponseLabelError {
+	color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+	margin: 15px 6px 6px;
+}
+
+
+
+

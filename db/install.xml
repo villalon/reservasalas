@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/reservasalas/db" VERSION="20140519" COMMENT="XMLDB file for Moodle local/reservasalas"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="reservasalas_sedes" COMMENT="sedes de la universidad con salas de estudio">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nombre" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" COMMENT="nombre o locacion de la sede"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_edificios" COMMENT="edificios de las sedes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nombre" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sedes_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="id" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="sedes_id" TYPE="foreign" FIELDS="sedes_id" REFTABLE="reservasalas_sedes" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_salas" COMMENT="salas de los edificios">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nombre" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="nombre_pc" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="edificios_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="tipo" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Tipo de sala"/>
+        <FIELD NAME="capacidad" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Capacidad de la sala"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="edificios_id" TYPE="foreign" FIELDS="edificios_id" REFTABLE="reservasalas_edificios" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_reservas" COMMENT="reserva de salas">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="fecha_reserva" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="modulo" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="confirmado" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="activa" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Se refiere a que la reserva este hecha"/>
+        <FIELD NAME="alumno_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="salas_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="comentario_alumno" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="comentario_admin" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="fecha_creacion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="aquí se guarda la fecha de creación de las reservas"/>
+        <FIELD NAME="nombre_evento" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="asistentes" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="salas_id" TYPE="foreign" FIELDS="salas_id" REFTABLE="reservasalas_salas" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_bloqueados" COMMENT="tabla creada para tener el registro de los bloqueos de alumnos">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="fecha_bloqueo" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="id_reserva" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Se agrega el id de la resevra solo  si el bloqueo esta unido a una reserva"/>
+        <FIELD NAME="estado" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="comentarios" TYPE="char" LENGTH="150" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="alumno_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_modulos" COMMENT="Modulos correspondiente a los edificios">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nombre_modulo" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="nombre de modulo"/>
+        <FIELD NAME="hora_inicio" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Hora a la que inicia el modulo"/>
+        <FIELD NAME="hora_fin" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Hora a la finaliza el modulo"/>
+        <FIELD NAME="edificio_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Clave que relaciona el modulo con el edificio"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="edificio_id" TYPE="foreign" FIELDS="edificio_id" REFTABLE="reservasalas_edificios" REFFIELDS="id" COMMENT="Clave que relaciona el modulo con el edificio"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_otrasreservas" COMMENT="Reservas para salas de reuniones y salas de clase">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="fecha_reserva" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Fecha para para la cual se reserva la sala"/>
+        <FIELD NAME="fecha_creacion" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Fecha en la cual se realiza la reserva"/>
+        <FIELD NAME="modulo" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Modulo en cual se reserva"/>
+        <FIELD NAME="usuario_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Id del usuario que hace la reserva"/>
+        <FIELD NAME="comentario_usuario" TYPE="int" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Comentario de usuario"/>
+        <FIELD NAME="nombre_evento" TYPE="char" LENGTH="50" NOTNULL="false" DEFAULT="No name" SEQUENCE="false" COMMENT="Nombre de el evento a realizarse en la sala"/>
+        <FIELD NAME="asistentes_evento" TYPE="int" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Cantidad de asistentes al evento"/>
+        <FIELD NAME="comentario_evento" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Comentario para el evento"/>
+        <FIELD NAME="ip" TYPE="int" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Ip del pc en sala"/>
+        <FIELD NAME="salas_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Id sala reservada"/>
+        <FIELD NAME="id_responsable" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="salas_id" TYPE="foreign" FIELDS="salas_id" REFTABLE="reservasalas_salas" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_salarecursos" COMMENT="Relación sala y recursos">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="salas_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Id de sala"/>
+        <FIELD NAME="recursos_id" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Id del recurso"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="recursos_id" TYPE="foreign" FIELDS="recursos_id" REFTABLE="reservasalas_recursos" REFFIELDS="id"/>
+        <KEY NAME="salas_id" TYPE="foreign" FIELDS="salas_id" REFTABLE="reservasalas_salas" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="reservasalas_recursos" COMMENT="Recursos de las salas">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nombre" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="Nombre de el recurso"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
