@@ -27,7 +27,7 @@
 require_once(dirname(__FILE__) . '/../../config.php'); //obligatorio
 require_once($CFG->dirroot.'/local/reservasalas/forms.php');
 require_once($CFG->dirroot.'/local/reservasalas/tablas.php');
-
+//tercera prueba git
 //código para setear contexto, url, layout
 global $PAGE, $CFG, $OUTPUT, $DB;
 require_login();
