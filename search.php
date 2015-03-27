@@ -33,6 +33,7 @@ require_once($CFG->dirroot.'/local/reservasalas/lib.php');
 require_once($CFG->dirroot.'/local/reservasalas/tablas.php');
 
 global $DB,$USER;
+$params = Array();
 
 $baseurl = new moodle_url('/local/reservasalas/search.php'); //importante para crear la clase pagina
 $context = context_system::instance();
@@ -101,7 +102,9 @@ if($fromform = $buscador->get_data()){
 	}
 	
 	if($fromform->name){
-		$select.="AND nombre_evento like '%$fromform->name%' ";
+		//$select.="AND nombre_evento like '%$fromform->name%' ";
+		$select.= "AND ".$DB->sql_like('nombre_evento', ':nombre_evento')." ";
+		$params['nombre_evento'] = '%'.$fromform->name.'%';
 		
 	}
 	if($fromform->responsable){
@@ -239,7 +242,8 @@ elseif($fromform->eventType!=0){
 		}
 	}
 	$select.="AND activa=1";
-	$result = $DB->get_records_select('reservasalas_reservas',$select);
+	//$result = $DB->get_records_select('reservasalas_reservas',$select);
+	$result = $DB->get_records_select('reservasalas_reservas',$select,$params);
 	
 	if(empty($result) || $condition == 1){ // $condition=1 significa que no hay salas
 		
