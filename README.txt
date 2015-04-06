@@ -10,7 +10,7 @@ Developers: Nicolas Bañados (nbanados@alumnos.uai.cl)
 
 ------------------------------------------
 
-- What is thist?
+- What is this?
 
 reservasalas is a tool to keep control of the rooms of an educational 
 institution, in which teachers, students and administrative can reserve 
@@ -19,7 +19,7 @@ can create the necessary rooms to represent your educational institution,
 your schedule, also you can create buildings and places if is necessary. 
 To then be able to book a room on a given day and time or a time interval.
 
-- I need?
+- What I need to do?
 
 To install the "reservasalas" plugin is needed Moodle, 2.6.3+ or more, 
 in your system. After downloading the application you need:
