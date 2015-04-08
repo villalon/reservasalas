@@ -101,31 +101,42 @@ if ($fromform = $form_buscar->get_data ()) {
 			'activa' => 1 
 	) );
 	
-	?>
-<link rel="stylesheet" type="text/css" href="salas/css/Salas.css" />
-<script type="text/javascript" language="javascript"
-	src="salas/salas.nocache.js"></script>
+	if ( has_capability ( 'local/reservasalas:libreryrules', context_system::instance () )) {
+					
+			    $reservashoy=1000000000;
+				$reservasemana=1000000000;
+					
+			}else{
+				
+				$reservashoy= $CFG->reservasDia;
+				$reservasemana=$CFG->reservasSemana;
+			}
+		
+
+		?>
+<link rel="stylesheet" type="text/css"  href= "salas/css/Salas.css"/>
+<script type="text/javascript" language="javascript"src="salas/salas.nocache.js"></script>
 <?php
-	
-	$moodleurl = $CFG->wwwroot . '/local/reservasalas/ajax/data.php';
-	if (! isset ( $fromform->size ))
-		$fromform->size = "1-25";
-	if (! isset ( $fromform->fr ['frequency'] ))
-		$fromform->fr ['frequency'] = 1;
-	if ($CFG->reservasDia == null)
-		$CFG->reservasDia = 2;
-	if ($CFG->reservasSemana == null)
-		$CFG->reservasSemana = 6;
-	echo '<div
+		
+		$moodleurl = $CFG->wwwroot . '/local/reservasalas/ajax/data.php';
+		if (! isset ( $fromform->size )) 
+			$fromform->size = "1-25";
+		if (! isset ( $fromform->fr ['frequency'] )) 
+			$fromform->fr ['frequency'] = 1;
+		if ($CFG->reservasDia == null) 
+			$CFG->reservasDia = 2;
+		if ($CFG->reservasSemana == null) 
+			$CFG->reservasSemana = 6;
+		echo '<div
 					 id="salas" 
 					moodleurl="' . $moodleurl . '"	
 					fecha="' . $fromform->fecha . '"
 					type="' . $fromform->roomstype . '"
 					campus="' . $fromform->SedeEdificio . '"
-					userdailybooking="' . $reservasDia . '"
-					userweeklybooking="' . count ( $reservasSemana ) . '"
-					reservasdia="' . $CFG->reservasDia . '"
-					reservassemana="' . $CFG->reservasSemana . '"	
+					userdailybooking="'.$reservasDia.'"
+					userweeklybooking="'.count($reservasSemana).'"
+					reservasdia="' . $reservashoy . '"
+					reservassemana="' . $reservasemana . '"	
 					size="' . $fromform->size . '"
  					finalDate="' . $fromform->enddate . '"
  					days="' . $days . '"
