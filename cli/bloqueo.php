@@ -85,7 +85,7 @@ foreach($result as $data){
 		$record->fecha_bloqueo = $fechahoy;
 		$record->id_reserva = $idreserva;
 		$record->estado = 1;
-		$record->comentarios = get_string('blockedautomaticaly','local_reservasalas') ;
+		$record->comentarios = "bloqueado automático por no confirmar";
 		$record->alumno_id = $userid;
 		$DB->insert_record ( 'reservasalas_bloqueados', $record );
 	$i++;
