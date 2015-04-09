@@ -28,11 +28,11 @@ require_once(dirname(__FILE__) . '/../../config.php'); //obligatorio
 require_once($CFG->dirroot.'/local/reservasalas/forms.php');
 require_once($CFG->dirroot.'/local/reservasalas/tablas.php');
 
-// Code to set the context, url and layout.
+//código para setear contexto, url, layout
 global $PAGE, $CFG, $OUTPUT, $DB;
 require_login();
 $url = new moodle_url('/local/reservasalas/sedes.php'); 
-$context = context_system::instance();
+$context = context_system::instance();//context_system::instance();
 $PAGE->set_context($context);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
@@ -42,11 +42,11 @@ if(!has_capability('local/reservasalas:administration', $context)) {
 		print_error(get_string('INVALID_ACCESS','Reserva_Sala'));
 }
 			
-//We request the ACTION, it can be: ver, editar, eliminar, agregar, crear
+//rescatamos la ACTION, pueden ser: ver, editar, eliminar, agregar, crear
 $action = optional_param('action', 'ver', PARAM_TEXT);
 
 
-//ACTION Controller
+//Controller de las Acciones
 if($action == 'crear'){
 
 	$sedeform = new formSede();
@@ -114,7 +114,7 @@ if($action == 'ver'){
 	
 }
 
-//View of the ACTIONS
+//View de las Acciones
 //**************************************************************************************************************************************************
 if($action == 'editar'){
 	
@@ -155,6 +155,7 @@ if($action == 'editar'){
 	$PAGE->set_heading($title);
 	
 	$o.= $OUTPUT->header();
+	//$o.= $OUTPUT->heading($title);
 	$o .= $OUTPUT->tabtree($toprow, get_string('sites', 'local_reservasalas'));
 	$url = new moodle_url("sedes.php", array('action'=>'crear'));
 
