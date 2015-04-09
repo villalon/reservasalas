@@ -103,8 +103,8 @@ if ($fromform = $form_buscar->get_data ()) {
 	
 	if ( has_capability ( 'local/reservasalas:libreryrules', context_system::instance () )) {
 					
-			    $reservashoy=1000000000;
-				$reservasemana=1000000000;
+			    $reservashoy=$CFG->reservas_dia_admin;
+				$reservasemana=$CFG->reservas_semana_admin;
 					
 			}else{
 				

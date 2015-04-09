@@ -25,4 +25,4 @@
 defined ( 'MOODLE_INTERNAL' ) || die ();
 $plugin->pluginname = "local_reservasalas";
 $plugin->component = 'local_reservasalas';
-$plugin->version = '2015032100';
+$plugin->version = '2015040801';
