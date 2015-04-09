@@ -30,11 +30,15 @@ require_once ($CFG->dirroot . '/local/reservasalas/lib.php');
 require_once ($CFG->dirroot . '/local/reservasalas/tablas.php');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 global $DB,$USER;
 $params = Array();
 =======
 global $DB, $USER;
 >>>>>>> 01637c4100075e77eadcc873b22be1e814218720
+=======
+global $DB, $USER;
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 
 $baseurl = new moodle_url ( '/local/reservasalas/search.php' ); // Required to create the class page.
 $context = context_system::instance ();
@@ -59,6 +63,7 @@ if ($action == "ver") {
 		
 		$select = '1=1 ';
 		
+<<<<<<< HEAD
 <<<<<<< HEAD
 		$end->add(new DateInterval('P'.$dias.'D')); // Move to 1 year from start
 	
@@ -86,6 +91,10 @@ if ($action == "ver") {
 		$date = $fromform->startdate;
 		$date = date ( "Y-m-d", $date );
 >>>>>>> 01637c4100075e77eadcc873b22be1e814218720
+=======
+		$date = $fromform->startdate;
+		$date = date ( "Y-m-d", $date );
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 		
 		$endDate = $fromform->enddate;
 		$multiple = $fromform->addmultiply;
@@ -101,6 +110,7 @@ if ($action == "ver") {
 			
 			$step = 1;
 			$unit = 'D';
+<<<<<<< HEAD
 			
 			$start = new DateTime ( $date );
 			$end = clone $start; // ¿?
@@ -109,6 +119,16 @@ if ($action == "ver") {
 			
 			$end->add ( new DateInterval ( 'P' . $dias . 'D' ) ); // Move to 1 year from start
 			
+=======
+			
+			$start = new DateTime ( $date );
+			$end = clone $start; // ¿?
+			
+			$dias = intval ( $dias );
+			
+			$end->add ( new DateInterval ( 'P' . $dias . 'D' ) ); // Move to 1 year from start
+			
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 			$interval = new DateInterval ( "P{$step}{$unit}" );
 			$period = new DatePeriod ( $start, $interval, $end );
 			
@@ -262,6 +282,7 @@ if ($action == "ver") {
 			}
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}
 	$select.="AND activa=1";
 	//$result = $DB->get_records_select('reservasalas_reservas',$select);
@@ -274,6 +295,10 @@ if ($action == "ver") {
 		$select .= "AND activa=1";
 		$result = $DB->get_records_select ( 'reservasalas_reservas', $select );
 >>>>>>> 01637c4100075e77eadcc873b22be1e814218720
+=======
+		$select .= "AND activa=1";
+		$result = $DB->get_records_select ( 'reservasalas_reservas', $select );
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 		
 		if (empty ( $result ) || $condition == 1) { // $condition=1 means there are no rooms.
 			
@@ -298,9 +323,15 @@ if ($action == "ver") {
 		}
 	}
 } else if ($action == "Eliminar") {
+<<<<<<< HEAD
 	
 	echo $OUTPUT->heading ( get_string ( 'reserveseliminated', 'local_reservasalas' ) . '!' );
 	
+=======
+	
+	echo $OUTPUT->heading ( get_string ( 'reserveseliminated', 'local_reservasalas' ) . '!' );
+	
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 	if (! has_capability ( 'local/reservasalas:delete', $context )) {
 		print_error ( get_string ( 'INVALID_ACCESS', 'Reserva_Sala' ) );
 	}
@@ -377,11 +408,19 @@ if ($action == "ver") {
 	} else {
 		$check_list = "";
 	}
+<<<<<<< HEAD
 	
 	$form = new cambiarReserva ( null, array (
 			'x' => $check_list 
 	) );
 	
+=======
+	
+	$form = new cambiarReserva ( null, array (
+			'x' => $check_list 
+	) );
+	
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 	if ($fromform = $form->get_data ()) {
 		
 		$info = json_decode ( $fromform->info );
@@ -391,6 +430,7 @@ if ($action == "ver") {
 		) );
 		
 		foreach ( $info as $check ) {
+<<<<<<< HEAD
 			
 			$reserva = $DB->get_record ( 'reservasalas_reservas', array (
 					'id' => $check 
@@ -412,6 +452,29 @@ if ($action == "ver") {
 				$module->id = 0;
 			}
 			
+=======
+			
+			$reserva = $DB->get_record ( 'reservasalas_reservas', array (
+					'id' => $check 
+			) );
+			$modulo = $DB->get_record ( 'reservasalas_modulos', array (
+					'id' => $reserva->modulo 
+			) );
+			if (strpos ( $modulo->nombre_modulo, "|" )) {
+				$siguiente = $reserva->modulo + 1;
+				$anterior = $reserva->modulo - 1;
+				
+				$select = "nombre_modulo LIKE '%|%' and id in('$siguiente','$anterior')";
+				$results = $DB->get_records_select ( 'reservasalas_modulos', $select );
+				foreach ( $results as $result ) {
+					$module = $result;
+				}
+			} else {
+				$module = new stdClass ();
+				$module->id = 0;
+			}
+			
+>>>>>>> 9920d14df9baf4113a7feaf71be671d75dcf39ea
 			$select = "modulo in ('$reserva->modulo','$module->id') AND fecha_reserva = '$reserva->fecha_reserva' AND
 		salas_id='$sala->id'";
 			$newResera = $DB->get_record_select ( 'reservasalas_reservas', $select );
