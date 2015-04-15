@@ -95,12 +95,23 @@ if ($fromform = $form_buscar->get_data ()) {
 		$sqlsemana = "SELECT * 
 				FROM {reservasalas_reservas}
 				WHERE fecha_reserva >= '$hoy' AND fecha_reserva <= ADDDATE('$hoy', 7) AND alumno_id=$USER->id AND activa = 1";
-			$reservasSemana = $DB->get_records_sql ( $sqlsemana );
-			$reservasDia = $DB->count_records ( 'reservasalas_reservas', array (
-					'alumno_id' => $USER->id,
-					'fecha_reserva' => $date,
-					'activa' => 1 
-			) );
+	$reservasSemana = $DB->get_records_sql ( $sqlsemana );
+	$reservasDia = $DB->count_records ( 'reservasalas_reservas', array (
+			'alumno_id' => $USER->id,
+			'fecha_reserva' => $date,
+			'activa' => 1 
+	) );
+	
+	if ( has_capability ( 'local/reservasalas:libreryrules', context_system::instance () )) {
+					
+			    $reservashoy=$CFG->reservas_dia_admin;
+				$reservasemana=$CFG->reservas_semana_admin;
+					
+			}else{
+				
+				$reservashoy= $CFG->reservasDia;
+				$reservasemana=$CFG->reservasSemana;
+			}
 		
 
 		?>
@@ -125,8 +136,8 @@ if ($fromform = $form_buscar->get_data ()) {
 					campus="' . $fromform->SedeEdificio . '"
 					userdailybooking="'.$reservasDia.'"
 					userweeklybooking="'.count($reservasSemana).'"
-					reservasdia="' . $CFG->reservasDia . '"
-					reservassemana="' . $CFG->reservasSemana . '"	
+					reservasdia="' . $reservashoy . '"
+					reservassemana="' . $reservasemana . '"	
 					size="' . $fromform->size . '"
  					finalDate="' . $fromform->enddate . '"
  					days="' . $days . '"
@@ -135,4 +146,4 @@ if ($fromform = $form_buscar->get_data ()) {
  		>
 		</div>';
 }
-echo $OUTPUT->footer (); // imprime el footer
+echo $OUTPUT->footer (); // Footer.
