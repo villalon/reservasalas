@@ -628,7 +628,10 @@ class formBuscarSalas extends moodleform {
 		$mform =& $this->_form;
 		// Copy center instructions
 		$mform->addElement ( 'header', 'headerdate', get_string('basicoptions', 'local_reservasalas'));
-		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ');
+		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ', array(
+    					'startyear' => date('Y'), 
+    					'stopyear'  => date('Y')+2,
+						));
 		$sedeedificio = array();
 		$edificios = $DB->get_records('reservasalas_edificios');
 		$sedeedificio[0]=" ";
@@ -722,41 +725,31 @@ class formBuscarSalas extends moodleform {
 		$week =  $week->modify('+7 days');
 
 		$errors=array();
-
+		$data['fecha'] = $data['fecha'] + (24*60*60);// Se suma un dia, ya que el data_select no funciona correctamente
+		
 		// Verifica que la fecha del formulario sea al menos hoy
 		if($data['fecha']<$today->getTimestamp()){
-			$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');
-		
+			$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');		
 		}
-	
+
 		// Verifica que la fecha solicitada no sea en Domingo	
-		if(date('N',$data['fecha'])==7) {
-			
-			$errors['fecha'] = get_string('cannotreservesunday', 'local_reservasalas');
-			
+		if(date('N',$data['fecha'])==7) {			
+			$errors['fecha'] = get_string('cannotreservesunday', 'local_reservasalas');			
 		}
-		
-		
-		
+				
 		if(!(has_capability('local/reservasalas:libreryrules', context_system::instance()))){
 			// Si no es biblioteca verifica que no reserve mas alla de 7 dias adelante
 			if($data['fecha']>$week->getTimestamp()){
-				$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');
-			
-			}
-			
-			
+				$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');			
+			}	
 		}
 
-		
-		
-		
 		if(has_capability('local/reservasalas:typeroom', context_system::instance())){
 			if($data['roomstype']==0){
-				$errors['roomstype'] = get_string('selectaroom', 'local_reservasalas');
-		
+				$errors['roomstype'] = get_string('selectaroom', 'local_reservasalas');	
 			}
 		}
+		
 		if(isset($data['alumno'])){
 			if ($data['alumno'] != "") {
 				if(!$DB->get_record('user', array('username'=>$data['alumno']))){
@@ -863,7 +856,7 @@ class formBuscarSalas extends moodleform {
 	 		
 	
 	
-	
+	var_dump($errors);
 		return $errors;
 	}
 }
