@@ -23,8 +23,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Reservation user page.
-// Capabilities: reservar, modificar, cancelar, consultar.
+// Pagina de reserva para los usuarios
+// capacidades de: reservar, modificar, cancelar, consultar
 require_once (dirname ( __FILE__ ) . '/../../config.php');
 require_once ($CFG->dirroot . '/local/reservasalas/forms.php');
 require_once ($CFG->dirroot . '/local/reservasalas/lib.php');
@@ -32,10 +32,10 @@ require_once ($CFG->dirroot . '/local/reservasalas/tablas.php');
 
 global $DB, $USER, $CFG;
 
-require_login (); // Require login
+require_login (); // Requiere estar log in
 
-$baseurl = new moodle_url ( '/local/reservasalas/reservar.php' ); // Important to create the page class.
-$context = context_system::instance ();
+$baseurl = new moodle_url ( '/local/reservasalas/reservar.php' ); // importante para crear la clase pagina
+$context = context_system::instance (); // context_system::instance();
 $PAGE->set_context ( $context );
 $PAGE->set_url ( $baseurl );
 $PAGE->set_pagelayout ( 'standard' );
@@ -43,38 +43,39 @@ $PAGE->set_title ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 $PAGE->set_heading ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 $PAGE->navbar->add ( get_string ( 'roomsreserve', 'local_reservasalas' ) );
 $PAGE->navbar->add ( get_string ( 'reserverooms', 'local_reservasalas' ), 'reservar.php' );
-echo $OUTPUT->header (); // Header.
+echo $OUTPUT->header (); // Imprime el header
 echo $OUTPUT->heading ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 
 $form_buscar = new formBuscarSalas ( null );
 echo $form_buscar->display ();
 
-if ($fromform = $form_buscar->get_data ()) {
-	if (! has_capability ( 'local/reservasalas:typeroom', context_system::instance () )) {
-		$fromform->roomstype = 2;
-	}
-	if (! has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )) {
-		$fromform->addmultiply = 0;
-		$fromform->enddate = $fromform->fecha;
-	}
-	
-	$recursoskeys = "";
-	$rev = false;
-	$totalrecursos = 0;
-	if (isset ( $fromform->recursos ) && count ( $fromform->recursos ) > 0) {
-		$recursoskeysarr = array ();
-		foreach ( $fromform->recursos as $key => $value ) {
-			
-			if ($value) {
+if ($fromform = $form_buscar->get_data ()) {		
+		if (! has_capability ( 'local/reservasalas:typeroom', context_system::instance () )) {
+			$fromform->roomstype = 2;
+		}
+		if (! has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )) {
+			$fromform->addmultiply = 0;
+			$fromform->enddate=$fromform->fecha;
+		}
+
+		$recursoskeys = "";
+		$rev = false;
+		$totalrecursos = 0;
+		if (isset ( $fromform->recursos ) && count ( $fromform->recursos ) > 0) {
+			$recursoskeysarr = array ();
+			foreach ( $fromform->recursos as $key => $value ) {
 				
-				$recursoskeysarr [] = $key;
-				$rev = true;
-				$totalrecursos ++;
+				if ($value) {
+					
+					$recursoskeysarr [] = $key;
+					$rev = true;
+					$totalrecursos ++;
+				}
 			}
 		}
-	}
-	$days = "";
-	if (has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )) {
+		$days = "";
+		if ( has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )) {
+		
 		
 		if ($fromform->ss ['monday'] == 1)
 			$days = $days . "L";
@@ -88,29 +89,18 @@ if ($fromform = $form_buscar->get_data ()) {
 			$days = $days . "V";
 		if ($fromform->ss ['saturday'] == 1)
 			$days = $days . "S";
-	}
-	$date = date ( 'Y-m-d', $fromform->fecha );
-	$hoy = date ( 'Y-m-d', time () );
-	$sqlsemana = "SELECT * 
+		}
+		$date=date('Y-m-d',$fromform->fecha);
+		$hoy=date('Y-m-d',time());
+		$sqlsemana = "SELECT * 
 				FROM {reservasalas_reservas}
 				WHERE fecha_reserva >= '$hoy' AND fecha_reserva <= ADDDATE('$hoy', 7) AND alumno_id=$USER->id AND activa = 1";
-	$reservasSemana = $DB->get_records_sql ( $sqlsemana );
-	$reservasDia = $DB->count_records ( 'reservasalas_reservas', array (
-			'alumno_id' => $USER->id,
-			'fecha_reserva' => $date,
-			'activa' => 1 
-	) );
-	
-	if ( has_capability ( 'local/reservasalas:libreryrules', context_system::instance () )) {
-					
-			    $reservashoy=1000000000;
-				$reservasemana=1000000000;
-					
-			}else{
-				
-				$reservashoy= $CFG->reservasDia;
-				$reservasemana=$CFG->reservasSemana;
-			}
+			$reservasSemana = $DB->get_records_sql ( $sqlsemana );
+			$reservasDia = $DB->count_records ( 'reservasalas_reservas', array (
+					'alumno_id' => $USER->id,
+					'fecha_reserva' => $date,
+					'activa' => 1 
+			) );
 		
 
 		?>
@@ -135,8 +125,8 @@ if ($fromform = $form_buscar->get_data ()) {
 					campus="' . $fromform->SedeEdificio . '"
 					userdailybooking="'.$reservasDia.'"
 					userweeklybooking="'.count($reservasSemana).'"
-					reservasdia="' . $reservashoy . '"
-					reservassemana="' . $reservasemana . '"	
+					reservasdia="' . $CFG->reservasDia . '"
+					reservassemana="' . $CFG->reservasSemana . '"	
 					size="' . $fromform->size . '"
  					finalDate="' . $fromform->enddate . '"
  					days="' . $days . '"
@@ -145,4 +135,4 @@ if ($fromform = $form_buscar->get_data ()) {
  		>
 		</div>';
 }
-echo $OUTPUT->footer (); // Footer.
+echo $OUTPUT->footer (); // imprime el footer
