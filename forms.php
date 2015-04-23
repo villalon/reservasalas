@@ -853,10 +853,7 @@ class formBuscarSalas extends moodleform {
  }
  
 		}
-	 		
-	
-	
-	var_dump($errors);
+
 		return $errors;
 	}
 }
