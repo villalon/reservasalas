@@ -32,7 +32,7 @@ if ($hassiteconfig) {
 	$settings = new admin_settingpage('local', 'Reserva de salas');
 	$ADMIN->add('localplugins', $settings);
     $settings->add(new admin_setting_configtext('user', 'Ejemplo de usuario', 'Ejemplo: usuario@email.com', '', PARAM_TEXT));
-    $settings->add(new admin_setting_configtext('reservasDia', 'Numero máximo de reservas al día', '2', '2', PARAM_INT));
-    $settings->add(new admin_setting_configtext('reservasSemana', 'Numero máximo de reservas a la semana', '6', '6', PARAM_INT));
+    $settings->add(new admin_setting_configtext('reservasDia', 'Numero máximo de reservas al día  por alumno', '2', '2', PARAM_INT));
+    $settings->add(new admin_setting_configtext('reservasSemana', 'Numero máximo de reservas a la semana  por alumno', '6', '6', PARAM_INT));
     
 }
