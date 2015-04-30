@@ -646,6 +646,7 @@ class formBuscarSalas extends moodleform {
 			if(has_capability('local/reservasalas:typeroom', context_system::instance())){
 				$options=array(0=>"",1=>get_string('class', 'local_reservasalas'), 2=>get_string('study', 'local_reservasalas'), 3=>get_string('reunion', 'local_reservasalas'));
 				$mform->addElement('select', 'roomstype', get_string('selectTypeRoom', 'local_reservasalas').': ', $options);
+				$mform->setDefault('roomstype', '2');
 			}
 			
 		// Copy center instructions
@@ -791,8 +792,6 @@ class formBuscarSalas extends moodleform {
 			
 			
 		if($data['addmultiply']==1){
-		  if( isset($diasArray['monday']) && isset($diasArray['tuesday']) && isset($diasArray['wednesday']) && isset($diasArray['thursday']) && 
-		  		isset($diasArray['friday']) && isset($diasArray['saturday']) && isset($diasArray['sunday'])){
 			if($diasArray['monday']==0 && $diasArray['tuesday']==0 && $diasArray['wednesday']==0 && $diasArray['thursday']== 0 &&
 			$diasArray['friday']==0 && $diasArray['saturday']==0 && $diasArray['sunday']==0){
 				
@@ -814,9 +813,6 @@ class formBuscarSalas extends moodleform {
 					$errors['ss'] = get_string('checkthedays', 'local_reservasalas');
 				}	
 			}
-		}else{
-			$errors['ss'] = get_string('selectatleastoneday', 'local_reservasalas');
-		}
 			if($data['enddate']<$data['fecha']|| $data['fecha']==$data['enddate']){
 				$errors['enddate'] = get_string('checkthedate', 'local_reservasalas');
 				
