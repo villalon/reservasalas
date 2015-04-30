@@ -791,6 +791,8 @@ class formBuscarSalas extends moodleform {
 			
 			
 		if($data['addmultiply']==1){
+		  if( isset($diasArray['monday']) && isset($diasArray['tuesday']) && isset($diasArray['wednesday']) && isset($diasArray['thursday']) && 
+		  		isset($diasArray['friday']) && isset($diasArray['saturday']) && isset($diasArray['sunday'])){
 			if($diasArray['monday']==0 && $diasArray['tuesday']==0 && $diasArray['wednesday']==0 && $diasArray['thursday']== 0 &&
 			$diasArray['friday']==0 && $diasArray['saturday']==0 && $diasArray['sunday']==0){
 				
@@ -799,10 +801,10 @@ class formBuscarSalas extends moodleform {
 				$param=false;
 				for($i=0;$i<=$dias;$i++){					
 					$siguiente = strtotime('+'.$i.' day',$data['fecha']);	
-					echo "siguiente ".$siguiente."<br>";				
+								
 					$dia_siguiente = strtolower(date("l",$siguiente));
-					echo "dia siguiente = ".$dia_siguiente."<br>";
-					echo " if de arreglo ".$diasArray[$dia_siguiente];				
+					
+								
 					if($diasArray[$dia_siguiente] == 1){
 						$i=$dias+1;
 						$param=true;
@@ -812,7 +814,9 @@ class formBuscarSalas extends moodleform {
 					$errors['ss'] = get_string('checkthedays', 'local_reservasalas');
 				}	
 			}
-		
+		}else{
+			$errors['ss'] = get_string('selectatleastoneday', 'local_reservasalas');
+		}
 			if($data['enddate']<$data['fecha']|| $data['fecha']==$data['enddate']){
 				$errors['enddate'] = get_string('checkthedate', 'local_reservasalas');
 				
@@ -822,8 +826,8 @@ class formBuscarSalas extends moodleform {
 		}
 	 		
 	
-	echo "Debug Errors ";
-	var_dump($errors);
+	
+	
 	
 		return $errors;
 	}
