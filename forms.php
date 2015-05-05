@@ -628,7 +628,10 @@ class formBuscarSalas extends moodleform {
 		$mform =& $this->_form;
 		// Copy center instructions
 		$mform->addElement ( 'header', 'headerdate', get_string('basicoptions', 'local_reservasalas'));
-		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ');
+		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ', array(
+    					'startyear' => date('Y'), 
+    					'stopyear'  => date('Y')+2,
+						));
 		$sedeedificio = array();
 		$edificios = $DB->get_records('reservasalas_edificios');
 		$sedeedificio[0]=" ";
@@ -643,6 +646,7 @@ class formBuscarSalas extends moodleform {
 			if(has_capability('local/reservasalas:typeroom', context_system::instance())){
 				$options=array(0=>"",1=>get_string('class', 'local_reservasalas'), 2=>get_string('study', 'local_reservasalas'), 3=>get_string('reunion', 'local_reservasalas'));
 				$mform->addElement('select', 'roomstype', get_string('selectTypeRoom', 'local_reservasalas').': ', $options);
+				$mform->setDefault('roomstype', '2');
 			}
 			
 		// Copy center instructions
@@ -689,22 +693,7 @@ class formBuscarSalas extends moodleform {
 		
 		$mform->addElement('select', 'size', get_string('capacity', 'local_reservasalas').': ', $options);
 		$mform->disabledIf('size', 'addmultiply', 'notchecked');
-	    $resourcesArray=array();
-		$seeResources = $DB->get_records('reservasalas_recursos');
-		
-		foreach($seeResources as $seeResource){
-			$nresources = $seeResource->id;
-			$checkName=$nresources;
-			
-			$resourcesArray[] =& $mform->createElement('advcheckbox', $nresources, $seeResource->nombre, $seeResource->nombre);
-			$mform->disabledIf($checkName, 'addmultiply', 'notchecked');
-			
-		}
-		
-		$mform->AddGroup($resourcesArray,'recursos', get_string('resources', 'local_reservasalas').': ');
-		$mform->disabledIf('recursos', 'addmultiply', 'notchecked');
-		
-	
+	    
 		}
 		$this->add_action_buttons(false, get_string('search', 'local_reservasalas'));
 
@@ -803,64 +792,36 @@ class formBuscarSalas extends moodleform {
 			
 			
 		if($data['addmultiply']==1){
-			if($diasArray['monday']==0 && $diasArray['tuesday']==0&&$diasArray['wednesday']==0&&$diasArray['thursday']==0&&
-			$diasArray['friday']==0&&$diasArray['saturday']==0&&$diasArray['sunday']==0){
+			if($diasArray['monday']==0 && $diasArray['tuesday']==0 && $diasArray['wednesday']==0 && $diasArray['thursday']== 0 &&
+			$diasArray['friday']==0 && $diasArray['saturday']==0 && $diasArray['sunday']==0){
 				
 				$errors['ss'] = get_string('selectatleastoneday', 'local_reservasalas');
-			}
-			else if($dias < 7){
+			}else if($dias < 7){
 				$param=false;
-				for($i=0;$i<=$dias;$i++){
+				for($i=0;$i<=$dias;$i++){					
+					$siguiente = strtotime('+'.$i.' day',$data['fecha']);	
+								
+					$dia_siguiente = strtolower(date("l",$siguiente));
 					
-				$siguiente=strtotime('+'.$i.' day',$data['fecha']);
-					
-				$dia_siguiente=strtolower(date("l",$siguiente));
-				
-					
-				if($diasArray[$dia_siguiente]==1)	{
-					$i=$dias+1;
-					$param=true;
-				}	
+								
+					if($diasArray[$dia_siguiente] == 1){
+						$i=$dias+1;
+						$param=true;
+					}	
 				}
-				if($param==false){
-					
+				if($param==false){					
 					$errors['ss'] = get_string('checkthedays', 'local_reservasalas');
 				}	
 			}
-		
 			if($data['enddate']<$data['fecha']|| $data['fecha']==$data['enddate']){
 				$errors['enddate'] = get_string('checkthedate', 'local_reservasalas');
 				
 			}
 	}
-		
-
-	$resources = $DB->get_records('reservasalas_recursos');
-	$resourcesArray = array();
-	foreach ($resources as $resource){
-		$resource_id=$resource->id;
-		$test=$data['recursos'][$resource_id];
-		if($test == '1'){
-			$resourcesArray[]=$resource->id;
-			}
-	}
-	
-	$string_query =implode(",",$resourcesArray);
-	if($string_query != null){
-			
-		$total=count($resourcesArray);
-		$queryRooms = "SELECT * FROM (SELECT salas_id, count(*) as total from {reservasalas_salas} as s INNER JOIN {reservasalas_salarecursos} as r
-		on s.id=r.salas_id WHERE r.recursos_id in($string_query)  GROUP BY salas_id) as q where q.total=$total";
-		$resources_query = $DB->get_records_sql($queryRooms);
-	if($resources_query == null){
-		
-		$errors['recursos'] = get_string('arenotroomswhithresources', 'local_reservasalas');
-		
-}
- }
  
 		}
 	 		
+	
 	
 	
 	

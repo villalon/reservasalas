@@ -34,18 +34,10 @@ $data= $DB->get_records('reservasalas_modulos',array('edificio_id'=>$id));
 return $data;
 
 }
-function get_booking($type, $campusid,$date,$rev,$resources,$multiply,$size,$finaldate,$days,$frequency) {
+function get_booking($type, $campusid,$date,$multiply,$size,$finaldate,$days,$frequency) {
 	global $DB;
 	
 	
-	
-	if ($rev == true) {
-		$recursoskeys = implode ( ",", $resources );
-		$sqlfiltrorecursos = "AND rs.id IN (SELECT salas_id from {reservasalas_salas} as s INNER JOIN {reservasalas_salarecursos} as r
-		on s.id=r.salas_id WHERE r.recursos_id in($recursoskeys)  GROUP BY salas_id)";
-	} else {
-		$sqlfiltrorecursos = "";
-	}
 	
 	$sqlfiltrocapacidad = '';
 	if ($multiply == 1) {
@@ -83,12 +75,11 @@ function get_booking($type, $campusid,$date,$rev,$resources,$multiply,$size,$fin
 	rm.hora_fin as modulofin,
 	rr.activa as status,
 	CASE WHEN rr.id IS NULL THEN 0 ELSE 1 END AS ocupada
-	FROM mdl_reservasalas_salas AS rs
-	INNER JOIN mdl_reservasalas_edificios AS re ON (re.id = rs.edificios_id AND rs.tipo = $type AND re.id=$campusid)
-	INNER JOIN mdl_reservasalas_modulos AS rm ON (rm.edificio_id = re.id)
-	LEFT JOIN mdl_reservasalas_reservas AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1)
+	FROM {reservasalas_salas} AS rs
+	INNER JOIN {reservasalas_edificios} AS re ON (re.id = rs.edificios_id AND rs.tipo = $type AND re.id=$campusid)
+	INNER JOIN {reservasalas_modulos} AS rm ON (rm.edificio_id = re.id AND rm.nombre_modulo not like '%B') 
+	LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1)
 	WHERE 1=1
-	$sqlfiltrorecursos
 	$sqlfiltrocapacidad
 	ORDER BY rs.id, rm.nombre_modulo ASC) AS disp
 	GROUP BY salaid, moduloid";

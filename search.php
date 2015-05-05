@@ -256,17 +256,17 @@ elseif($fromform->eventType!=0){
 	
 	echo html_writer::table($table);
 	if(has_capability('local/reservasalas:delete', $context)) {
-	echo'<input type="submit" name="action" value="'.get_string('remove', 'local_reservasalas').'" onClick="return ComfirmDeleteOrder();">';
+	echo'<input type="submit" name="action" value="remove" onClick="return ComfirmDeleteOrder();">';
 	}
 	if(has_capability('local/reservasalas:changewith', $context)) {
-	echo'<input type="submit" name="action" value="'.get_string('changeto', 'local_reservasalas').'">';
+	echo'<input type="submit" name="action" value="swap">';
 	}
 	
 	echo html_writer::end_tag('form');
 	}
 }
 }
-else if($action=="Eliminar"){
+else if($action=="remove"){
 	
 	echo $OUTPUT->heading(get_string('reserveseliminated', 'local_reservasalas').'!');
 	
@@ -294,7 +294,7 @@ else if($action=="Eliminar"){
 	echo html_writer::table($table);
 	echo $OUTPUT->single_button('search.php', get_string('return', 'local_reservasalas'));
 }
-else if($action=="Cambiar con"){
+else if($action=="swap"){
 
 	echo $OUTPUT->heading(get_string('change', 'local_reservasalas'));
 	
