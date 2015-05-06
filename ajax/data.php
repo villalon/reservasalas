@@ -127,11 +127,10 @@ if($action=="getbooking"){
 else if($action=="info"){
 	// 0 = false, 1 = true
 	$isAdmin= 0;
-	if(has_capability ( 'local/reservasalas:typeroom', context_system::instance () )){
-		if ( has_capability ( 'local/reservasalas:advancesearch', context_system::instance() )){
-			$isAdmin= 1;
-		}
+	if ( has_capability ( 'local/reservasalas:advancesearch', context_system::instance() )){
+		$isAdmin= 1;
 	}
+
 
 	$infoUser=Array(
 			"firstname"=>$USER->firstname,
