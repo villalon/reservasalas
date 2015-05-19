@@ -65,7 +65,7 @@ if($fromform = $buscador->get_data()){
 	$multiple=$fromform->addmultiply;
 	
 	
-	if($multiple==0){
+	if($multiple == 0){
 		$select.="AND fecha_reserva='$date'";
 		
 	}else if($multiple == 1){
@@ -104,18 +104,17 @@ if($fromform = $buscador->get_data()){
 	if($fromform->name){
 		//$select.="AND nombre_evento like '%$fromform->name%' ";
 		$select.= "AND ".$DB->sql_like('nombre_evento', ':nombre_evento')." ";
-		$params['nombre_evento'] = '%'.$fromform->name.'%';
+		$params['nombre_evento'] = "$fromform->name";
 		
 	}
 	if($fromform->responsable){
 		
-		$user=$DB->get_record('user',array('username'=>$fromform->responsable));
-		
-		if($user){
-		$select.="AND alumno_id='$user->id' ";
-		}
-	
+		// search by user email		
+		if( $user=$DB->get_record("user",array("email"=>$fromform->responsable)) ){
+			$select.="AND alumno_id='$user->id' ";
+		}	
 	}
+	
 	$id_salas=array();
 	if(isset($fromform->campus)){
 		$campus=$fromform->campus;
@@ -244,7 +243,6 @@ elseif($fromform->eventType!=0){
 	$select.="AND activa=1";
 	//$result = $DB->get_records_select('reservasalas_reservas',$select);
 	$result = $DB->get_records_select('reservasalas_reservas',$select,$params);
-	
 	if(empty($result) || $condition == 1){ // $condition=1 significa que no hay salas
 		
 		echo '<h5>'.get_string('noreservesarefound', 'local_reservasalas').'</h5>';
@@ -252,7 +250,7 @@ elseif($fromform->eventType!=0){
 	}else{
 	
 	$table = tablas::searchRooms($result);
-	echo html_writer::tag('<form','',array('name'=>'search','method'=>'POST'));
+	echo html_writer::tag('form','',array('name'=>'search','method'=>'POST'));
 	
 	echo html_writer::table($table);
 	if(has_capability('local/reservasalas:delete', $context)) {
