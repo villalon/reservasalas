@@ -1119,10 +1119,16 @@ class roomSearch extends moodleform  {
 		
 		$mform =& $this->_form;
 	    $mform->addElement('header','', '');
-		$mform->addElement('header','expanded', get_string('date', 'local_reservasalas'));
-		$mform->addElement('date_selector', 'startdate', get_string('startdate','local_reservasalas'));
+		$mform->addElement('header','expanded', get_string('date', 'local_reservasalas')." and ".get_string('event','local_reservasalas'));
+		$mform->addElement('date_selector', 'startdate', get_string('startdate','local_reservasalas'),array(
+    					'startyear' => date('Y')-2, 
+    					'stopyear'  => date('Y')+2,
+						));
 		$mform->addElement('advcheckbox', 'addmultiply', '',get_string('addend', 'local_reservasalas'));
-		$mform->addElement('date_selector', 'enddate', get_string('enddate','local_reservasalas'));
+		$mform->addElement('date_selector', 'enddate', get_string('enddate','local_reservasalas'),array(
+    					'startyear' => date('Y'), 
+    					'stopyear'  => date('Y')+3,
+						));
 		$mform->disabledIf('enddate', 'addmultiply', 'notchecked');
 		
         $options = array(
@@ -1134,13 +1140,17 @@ class roomSearch extends moodleform  {
 				'6' => '6',
 				'7' => '7',
 				'8' => '8');
-		
-	    $mform->addElement('header','notexpanded', get_string('event','local_reservasalas'));
+        $mform->addElement('advcheckbox', 'more', '',get_string('event','local_reservasalas'));
+        
         $mform->addElement('text', 'name', get_string('eventName','local_reservasalas'));
 		$mform->setType('name', PARAM_TEXT);
 		$mform->addElement('text', 'responsable', get_string('usercharge', 'local_reservasalas').': ');
 		$mform->setType('responsable', PARAM_TEXT);
-		$mform->setType('name', PARAM_TEXT);
+		$mform->setDefault('responsable', "user@alumnos.uai.cl");
+		
+		$mform->disabledIf('name', 'more', 'notchecked');
+		$mform->disabledIf('responsable', 'more', 'notchecked');
+		
 		$mform->addElement('header','notexpandedtwo', get_string('room','local_reservasalas'));
 		
 	    $sedeedificio = array();
