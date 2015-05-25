@@ -101,7 +101,7 @@ if($fromform = $buscador->get_data()){
 	
 	}
 	
-	if($fromform->name){
+	if(isset($fromform->name)){
 		//$select.="AND nombre_evento like '%$fromform->name%' ";
 		$select.= "AND ".$DB->sql_like('nombre_evento', ':nombre_evento')." ";
 		$params['nombre_evento'] = "$fromform->name";
@@ -250,7 +250,8 @@ elseif($fromform->eventType!=0){
 	}else{
 	
 	$table = tablas::searchRooms($result);
-	echo html_writer::tag('form','',array('name'=>'search','method'=>'POST'));
+	
+	echo html_writer::tag('<form','',array('name'=>'search','method'=>'POST'));
 	
 	echo html_writer::table($table);
 	if(has_capability('local/reservasalas:delete', $context)) {
