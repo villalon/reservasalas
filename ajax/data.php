@@ -26,7 +26,12 @@ define('NO_DEBUG_DISPLAY', true);
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once('qry/querylib.php');
+require_once ($CFG->dirroot . '/local/reservasalas/lib.php');
+
 global $CFG, $DB, $OUTPUT, $PAGE, $USER;
+
+require_login();
+
 $action = required_param('action', PARAM_TEXT);
 $campusid=optional_param('campusid', 0, PARAM_INT);
 $type=optional_param('type', 0, PARAM_INT);
@@ -162,7 +167,7 @@ else if($action=="info"){
 
 			$fechas=days_calculator($date,$finaldate,$days,$frequency);
 			foreach ($fechas as $fecha){
-				if(validation_booking($room[$i],$moduleid[$i],$fecha)){
+				if(validation_booking($room[$i],$moduleid[$i],$fecha) && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () ) ){
 					$time = time();
 					$data = array ();
 					$data ['fecha_reserva'] = $fecha[$i];
@@ -174,7 +179,7 @@ else if($action=="info"){
 					$data ['fecha_creacion'] = $time;
 					$data ['nombre_evento'] = $eventname;
 					$data ['asistentes'] = $asistentes;
-
+					
 					$DB->insert_record ( 'reservasalas_reservas', $data );
 					$values[]=Array(
 							'sala'=>$room[$i],
@@ -198,7 +203,10 @@ else if($action=="info"){
 			}
 
 		}else{
-
+			list($weekBookings,$todayBookings) = booking_availability($date);
+			
+			if(has_capability ( 'local/reservasalas:advancesearch', context_system::instance () ) 
+					|| ($weekBookings<6 && $todayBookings<2 ) ){
 			if(validation_booking($room[$i],$moduleid[$i],date('Y-m-d',$date))){
 				$time = time();
 				$data = array ();
@@ -228,6 +236,17 @@ else if($action=="info"){
 						'termino'=>$termino[$i],
 						'fecha'=>$date);
 			}else{
+				$error[]=Array(
+						'sala'=>$room[$i],
+						'nombresala'=>$nombresala[$i],
+						'modulo'=>$moduleid[$i],
+						'nombremodulo'=>$nombremodulo[$i],
+						'inicio'=>$inicio[$i],
+						'termino'=>$termino[$i],
+						'fecha'=>$date);
+					
+			}
+		}else{
 				$error[]=Array(
 						'sala'=>$room[$i],
 						'nombresala'=>$nombresala[$i],

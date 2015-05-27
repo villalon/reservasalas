@@ -85,7 +85,9 @@ if ($fromform = $form_buscar->get_data ()) {
 				$fromform->fr ['frequency'] = 1;
 		}
 		
-		//format YYYY-MM-DD
+		list($weekBookings,$todayBookings) = booking_availability($fromform->fecha);
+		
+		/*
 		$selectDate=date('Y-m-d',$fromform->fecha);	
 		$today=date('Y-m-d',time());
 		$sqlWeekBookings = "SELECT * 
@@ -99,6 +101,7 @@ if ($fromform = $form_buscar->get_data ()) {
 							'alumno_id' => $USER->id,
 							'fecha_reserva' => $selectDate,
 							'activa' => 1));
+		*/
 		
 		$moodleurl = $CFG->wwwroot . '/local/reservasalas/ajax/data.php';
 		
@@ -124,7 +127,7 @@ if ($fromform = $form_buscar->get_data ()) {
 			typeRoom= "<?php echo $fromform->roomstype; ?>"
 			campus = "<?php echo $fromform->SedeEdificio; ?>"
 			userDayReservations = "<?php echo $todayBookings; ?>"
-			userWeeklyBooking = "<?php echo count($weekBookings); ?>"
+			userWeeklyBooking = "<?php echo $weekBookings; ?>"
 			maxDailyBookings = "<?php echo $CFG->reservasDia; ?>"
 			maxWeeklyBookings = "<?php echo $CFG->reservasSemana; ?>"	
 			size = "<?php echo $fromform->size; ?>"
