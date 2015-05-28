@@ -103,10 +103,9 @@ function booking_availability($date){
 					AND alumno_id = ? AND activa = 1";
 	
 	$weekBookings = $DB->get_records_sql($sqlWeekBookings, array($today, $today, $USER->id));
-	echo "despue de sql semanal";
 	$todayBookings = $DB->count_records ( 'reservasalas_reservas', array (
 			'alumno_id' => $USER->id,
-			'fecha_reserva' => $date,
+			'fecha_reserva' => date('Y-m-d',$date),
 			'activa' => 1));
 	
 	$books= array(count($weekBookings),$todayBookings);

@@ -35,7 +35,7 @@ require_login();
 $action = required_param('action', PARAM_TEXT);
 $campusid=optional_param('campusid', 0, PARAM_INT);
 $type=optional_param('type', 0, PARAM_INT);
-$date=optional_param('date', 1, PARAM_INT);
+$initialDate=optional_param('date', 1, PARAM_INT);
 //$rev=optional_param('rev', false, PARAM_BOOL);
 $multiply=optional_param('multiply', 0, PARAM_INT);
 $size=optional_param('size', 0, PARAM_TEXT);
@@ -63,7 +63,7 @@ header ( 'Pragma: no-cache' );
 
 if($action=="getbooking"){
 
-	$output = get_booking($type, $campusid, $date, $multiply, $size,$finaldate,$days,$frequency);
+	$output = get_booking($type, $campusid, $initialDate, $multiply, $size,$finaldate,$days,$frequency);
 
 	$disponible=Array();
 	$modulos = Array();
@@ -161,13 +161,22 @@ else if($action=="info"){
 
 	$error= Array();
 	$values=Array();
-
-	for($i=1;$i<count($room);$i++){
-		if($multiply==1){
-
-			$fechas=days_calculator($date,$finaldate,$days,$frequency);
+	if(!has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
+		list($weekBookings,$todayBookings) = booking_availability($initialDate);
+		if((count($room)-1) > $todayBookings && ( (6 - $weekBookings) >= (count($room)-1) )){
+			$validation = true;
+		}else{
+			$validation = false;
+		}
+	}else{
+		$validation = true;
+	}
+	
+	for( $i=1; $i<count($room); $i++ ){
+		if( $multiply==1 && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
+			$fechas=days_calculator($initialDate,$finaldate,$days,$frequency);
 			foreach ($fechas as $fecha){
-				if(validation_booking($room[$i],$moduleid[$i],$fecha) && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () ) ){
+				if(validation_booking($room[$i],$moduleid[$i],$fecha)  ){
 					$time = time();
 					$data = array ();
 					$data ['fecha_reserva'] = $fecha[$i];
@@ -188,7 +197,7 @@ else if($action=="info"){
 							'nombremodulo'=>$nombremodulo[$i],
 							'inicio'=>$inicio[$i],
 							'termino'=>$termino[$i],
-							'fecha'=>$date);
+							'fecha'=>$initialDate);
 
 				}else{
 					$error[]=Array(
@@ -198,19 +207,16 @@ else if($action=="info"){
 							'nombremodulo'=>$nombremodulo[$i],
 							'inicio'=>$inicio[$i],
 							'termino'=>$termino[$i],
-							'fecha'=>$date);
+							'fecha'=>$initialDate);
 				}
 			}
 
 		}else{
-			list($weekBookings,$todayBookings) = booking_availability($date);
-			
-			if(has_capability ( 'local/reservasalas:advancesearch', context_system::instance () ) 
-					|| ($weekBookings<6 && $todayBookings<2 ) ){
-			if(validation_booking($room[$i],$moduleid[$i],date('Y-m-d',$date))){
+
+			if( validation_booking($room[$i],$moduleid[$i],date('Y-m-d',$initialDate)) && $validation){
 				$time = time();
 				$data = array ();
-				$data ['fecha_reserva'] = date ( 'Y-m-d', $date );
+				$data ['fecha_reserva'] = date ( 'Y-m-d', $initialDate );
 				$data ['modulo'] = $moduleid[$i];
 				$data ['confirmado'] = 0;
 				$data ['activa'] = 1;
@@ -234,7 +240,7 @@ else if($action=="info"){
 						'nombremodulo'=>$nombremodulo[$i],
 						'inicio'=>$inicio[$i],
 						'termino'=>$termino[$i],
-						'fecha'=>$date);
+						'fecha'=>$initialDate);
 			}else{
 				$error[]=Array(
 						'sala'=>$room[$i],
@@ -243,18 +249,7 @@ else if($action=="info"){
 						'nombremodulo'=>$nombremodulo[$i],
 						'inicio'=>$inicio[$i],
 						'termino'=>$termino[$i],
-						'fecha'=>$date);
-					
-			}
-		}else{
-				$error[]=Array(
-						'sala'=>$room[$i],
-						'nombresala'=>$nombresala[$i],
-						'modulo'=>$moduleid[$i],
-						'nombremodulo'=>$nombremodulo[$i],
-						'inicio'=>$inicio[$i],
-						'termino'=>$termino[$i],
-						'fecha'=>$date);
+						'fecha'=>$initialDate);
 					
 			}
 		}
