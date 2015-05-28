@@ -163,10 +163,13 @@ else if($action=="info"){
 	$values=Array();
 	if(!has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
 		list($weekBookings,$todayBookings) = booking_availability($initialDate);
-		if((count($room)-1) > $todayBookings && ( (6 - $weekBookings) >= (count($room)-1) )){
-			$validation = true;
-		}else{
+		if( $todayBookings == 2 
+				|| count($room)>3 
+				|| ( (($CFG->reservasDia - $todayBookings - count($room) + 1) < 0) 
+						&& ($CFG->reservasSemana - $weekBookings - count($room)+1) < 0) ){
 			$validation = false;
+		}else{
+			$validation = true;
 		}
 	}else{
 		$validation = true;

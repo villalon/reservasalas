@@ -46,6 +46,7 @@ $PAGE->navbar->add ( get_string ( 'reserverooms', 'local_reservasalas' ), 'reser
 echo $OUTPUT->header (); 
 echo $OUTPUT->heading ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 
+
 $form_buscar = new formBuscarSalas ( null );
 echo $form_buscar->display ();
 
@@ -86,22 +87,6 @@ if ($fromform = $form_buscar->get_data ()) {
 		}
 		
 		list($weekBookings,$todayBookings) = booking_availability($fromform->fecha);
-		
-		/*
-		$selectDate=date('Y-m-d',$fromform->fecha);	
-		$today=date('Y-m-d',time());
-		$sqlWeekBookings = "SELECT * 
-					FROM {reservasalas_reservas}
-					WHERE fecha_reserva >= ? 
-					AND fecha_reserva <= ADDDATE(?, 7) 
-					AND alumno_id = ? AND activa = 1";
-		
-		$weekBookings = $DB->get_records_sql($sqlWeekBookings, array($today, $today, $USER->id));		
-		$todayBookings = $DB->count_records ( 'reservasalas_reservas', array (
-							'alumno_id' => $USER->id,
-							'fecha_reserva' => $selectDate,
-							'activa' => 1));
-		*/
 		
 		$moodleurl = $CFG->wwwroot . '/local/reservasalas/ajax/data.php';
 		
