@@ -48,11 +48,6 @@ function hora_modulo($modulo) {
 	$d=$fin[0];$e=(int)$fin[1];$f=00; //hora;minuto;segundo
 	$minutos = str_replace(' ', '',$e);
 	
-	
-	
-	
-
-	
 	$ModuloInicia = new DateTime();
 	// Se deja hora y minutos en 0 (medianoche)
 	$ModuloInicia->setTime($a,$b,0);
@@ -95,7 +90,24 @@ function modulo_hora($unixtime, $factor = null){
 	}else{
 		return 0;
 	}
-
-
 }
 
+function booking_availability($date){
+	global $DB,$USER;
+	//format YYYY-MM-DD
+	$today = date('Y-m-d',time());
+	$sqlWeekBookings = "SELECT *
+					FROM {reservasalas_reservas}
+					WHERE fecha_reserva >= ?
+					AND fecha_reserva <= ADDDATE(?, 7)
+					AND alumno_id = ? AND activa = 1";
+	
+	$weekBookings = $DB->get_records_sql($sqlWeekBookings, array($today, $today, $USER->id));
+	$todayBookings = $DB->count_records ( 'reservasalas_reservas', array (
+			'alumno_id' => $USER->id,
+			'fecha_reserva' => date('Y-m-d',$date),
+			'activa' => 1));
+	
+	$books= array(count($weekBookings),$todayBookings);
+	return $books;
+}
