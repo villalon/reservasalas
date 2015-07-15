@@ -312,4 +312,8 @@ $string['havesentdetailsbook']="*We have sent the details to your email address 
 $string['problemsendingbookingdetails']="*There is a problem sending your booking details to your email";
 $string['roomcapacityacepted']= "The capacity of the room must be an integer(positive)";
 $string['reservemessage'] = 'Remember having 5 minutes before and 15 minutes after the start of your booking to confirm';
+$string['thecampisempty'] = 'The field is empty ';
+
+
+
 ?>

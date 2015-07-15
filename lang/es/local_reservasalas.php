@@ -313,6 +313,7 @@ $string['havesentdetailsbook']="*Se ha enviado la información de su reserva a s
 $string['problemsendingbookingdetails']="*Existe un problema para enviar la información de su reserva a su email";
 $string['roomcapacityacepted']= "La capacidad de la sala debe ser un número entero(positivo)";
 $string['reservemessage'] = 'Recuerde que tiene entre 5 minutos antes y 15 minutos despues de iniciada su reserva para confirmar';
+$string['thecampisempty'] = 'El campo esta vacio ';
 
 
 ?>
