@@ -32,7 +32,7 @@ require_once($CFG->dirroot.'/local/reservasalas/tablas.php');
 global $PAGE, $CFG, $OUTPUT, $DB;
 //Verifica que el usuario que accese a la página este logeado en el sistema
 require_login();
-$url = new moodle_url('/local/reservasalas/editarsalas.php'); 
+$url = new moodle_url('/local/reservasalas/desbloquear.php'); 
 $context = context_system::instance();//context_system::instance();
 $PAGE->set_context($context);
 $PAGE->set_url($url);
@@ -70,10 +70,10 @@ if($fromform = $desbloquearform->get_data()){
 			$DB->update_record('reservasalas_bloqueados', $record);
 			$desbloqueado = true;
 		}else{
-			print_error("El usuario no esta bloqueado.");
+			print_error(get_string('noblock', 'local_reservasalas'));
 		}		
 	}else{
-		print_error("El usuario ingresado no existe.");
+		print_error(get_string('noexist', 'local_reservasalas'));
 	}
 }
 

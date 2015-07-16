@@ -376,6 +376,9 @@ class formSede extends moodleform {
 		if(!empty($recuperarsede)){
 			$errors['sede']=get_string('thenameexists', 'local_reservasalas');
 		}
+		if(empty($data['sede'])){
+			$errors['sede']=get_string('thecampisempty', 'local_reservasalas');
+			}
 		return $errors;
 	}
 	

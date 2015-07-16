@@ -87,7 +87,7 @@ $string['information'] = 'Información de reserva';
 $string['messageprovider:reservenotification'] = 'Notificación de reserva';
 $string['invalidaccess'] = 'INVALID_ACCESS';
 $string['module'] = 'Módulo';
-$string['modulecondition'] = '*En caso de exstir modulos con comiezos y terminos diferidos, como 1A y 1B, se debe escribir de la siguente forma: '.'</br>'.'</br>'.'#1|A,8:15-9:25'.'</br>'.'#1|B,8:30-9:40';
+$string['modulecondition'] = '*En caso de existir modulos con comiezos y terminos diferidos, como 1A y 1B, se debe escribir de la siguente forma: '.'</br>'.'</br>'.'#1|A,8:15-9:25'.'</br>'.'#1|B,8:30-9:40';
 $string['modulerule'] = '*#Nombre, inicio-termino';
 $string['modules'] = 'Módulos';
 $string['newbuilding'] = 'Nuevo edificio';
@@ -313,6 +313,10 @@ $string['havesentdetailsbook']="*Se ha enviado la información de su reserva a s
 $string['problemsendingbookingdetails']="*Existe un problema para enviar la información de su reserva a su email";
 $string['roomcapacityacepted']= "La capacidad de la sala debe ser un número entero(positivo)";
 $string['reservemessage'] = 'Recuerde que tiene entre 5 minutos antes y 15 minutos despues de iniciada su reserva para confirmar';
+$string['thecampisempty'] = 'El campo esta vacio ';
+$string['noblock'] = 'El usuario no esta bloqueado.';
+$string['noexist'] ='El usuario ingresado no existe.';
+$string['swap'] = 'intercambiar.';
 
 
 ?>
