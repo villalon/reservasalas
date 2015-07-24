@@ -852,16 +852,16 @@ class buscadorUsuario extends moodleform{
 			if($bloqueos = $DB->get_records('reservasalas_bloqueados', array('alumno_id'=>$user->id))){
 				foreach($bloqueos as $bloqueo){
 					if($bloqueo->estado ==1){
-						$errors['email'] = '*'.get_string('blockuser', 'local_reservasalas');
+						$errors['email'] = get_string('blockuser', 'local_reservasalas');
 					}
 				}
 			}
 		}else{
-			$errors['email'] = '*'.get_string('notuser', 'local_reservasalas').': ';
+			$errors['email'] = get_string('notuser', 'local_reservasalas');
 		}
 		}
 		else{
-			$errors['email'] = '*'.get_string('empty', 'local_reservasalas').': ';
+			$errors['email'] = get_string('empty', 'local_reservasalas');
 		}
 		return $errors;
 	}
@@ -894,14 +894,14 @@ class desbloquearAlumnoForm extends moodleform{
 			}
 				
 			if($bloqueado==false){
-				$errors['email'] = '*'.get_string('unblockuser', 'local_reservasalas').': ';
+				$errors['email'] = get_string('unblockuser', 'local_reservasalas');
 			}
 		}else{
-			$errors['email'] = '*'.get_string('notuser', 'local_reservasalas').': ';
+			$errors['email'] = get_string('notuser', 'local_reservasalas');
 		}
 		}
 		else{
-			$errors['email'] = '*'.get_string('empty', 'local_reservasalas').': ';
+			$errors['email'] = get_string('empty', 'local_reservasalas');
 		}
 		return $errors;
 	}

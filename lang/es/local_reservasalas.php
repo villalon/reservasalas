@@ -98,7 +98,7 @@ $string['newresource'] = 'Nuevo Recurso';
 $string['next'] = 'Siguente';
 $string['notrooms'] = 'No se encontraron salas con ese nombre';
 $string['notsendemail'] = 'Existen problemas para enviar la información de reserva a su email';
-$string['notuser'] = 'Nombre de usuario no esta registrado';
+$string['notuser'] = 'El email no esta registrado';
 $string['numbersofrooms'] = 'Numero de salas';
 $string['pcname'] = 'Nombre PC';
 $string['places'] = 'Sedes';
@@ -313,11 +313,11 @@ $string['havesentdetailsbook']="*Se ha enviado la información de su reserva a s
 $string['problemsendingbookingdetails']="*Existe un problema para enviar la información de su reserva a su email";
 $string['roomcapacityacepted']= "La capacidad de la sala debe ser un número entero(positivo)";
 $string['reservemessage'] = 'Recuerde que tiene entre 5 minutos antes y 15 minutos despues de iniciada su reserva para confirmar';
-$string['thecampisempty'] = 'El campo esta vacio ';
+$string['thecampisempty'] = 'El campo esta vacio';
 $string['noblock'] = 'El usuario no esta bloqueado.';
 $string['noexist'] ='El usuario ingresado no existe.';
 $string['swap'] = 'intercambiar.';
-$string['empty'] = 'Es encesario rellenar el campo email.';
+$string['empty'] = 'Es necesario rellenar el campo email.';
 
 
 ?>

@@ -96,18 +96,24 @@ function booking_availability($date){
 	global $DB,$USER;
 	//format YYYY-MM-DD
 	$today = date('Y-m-d',time());
-	$sqlWeekBookings = "SELECT *
-					FROM {reservasalas_reservas}
-					WHERE fecha_reserva >= ?
-					AND fecha_reserva <= ADDDATE(?, 7)
-					AND alumno_id = ? AND activa = 1";
+	if( !$isbloked = $DB->get_record('reservasalas_bloqueados', array("alumno_id"=>$USER->id, 'estado'=>1))){
+		
+		$sqlWeekBookings = "SELECT *
+						FROM {reservasalas_reservas}
+						WHERE fecha_reserva >= ?
+						AND fecha_reserva <= ADDDATE(?, 7)
+						AND alumno_id = ? AND activa = 1";
 	
-	$weekBookings = $DB->get_records_sql($sqlWeekBookings, array($today, $today, $USER->id));
-	$todayBookings = $DB->count_records ( 'reservasalas_reservas', array (
-			'alumno_id' => $USER->id,
-			'fecha_reserva' => date('Y-m-d',$date),
-			'activa' => 1));
+		$weekBookings = $DB->get_records_sql($sqlWeekBookings, array($today, $today, $USER->id));
+		$todayBookings = $DB->count_records ( 'reservasalas_reservas', array (
+				'alumno_id' => $USER->id,
+				'fecha_reserva' => date('Y-m-d',$date),
+				'activa' => 1));
 	
-	$books= array(count($weekBookings),$todayBookings);
+		$books= array(count($weekBookings),$todayBookings);
+
+	}else{
+		$books = array(6,2);
+	}
 	return $books;
 }
