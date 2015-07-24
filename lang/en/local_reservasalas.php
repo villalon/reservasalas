@@ -171,7 +171,7 @@ $string['uaiemail'] = 'UAI email';
 $string['unblock'] = 'Unblock';
 $string['unblockagain'] = 'Unblock student again';
 $string['unblockstudent'] = 'Unblock student';
-$string['unblockuser'] = 'User already unblocked';
+$string['unblockuser'] = 'The user is not block';
 $string['usercharge'] = 'User responsible';
 $string['userReserves'] = 'Reserve for user';
 $string['users'] = 'Users';
@@ -316,7 +316,7 @@ $string['thecampisempty'] = 'The field is empty ';
 $string['noblock'] = 'The user is not block.';
 $string['noexist'] = 'The user dont exist.';
 $string['swap'] = 'swap.';
-
+$string['empty'] = 'Is needed to fill the email field';
 
 
 ?>

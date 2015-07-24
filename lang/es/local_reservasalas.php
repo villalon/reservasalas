@@ -172,7 +172,7 @@ $string['uaiemail'] = 'Correo UAI';
 $string['unblock'] = 'Desbloquear';
 $string['unblockagain'] = 'Volver a desbloquear alumno';
 $string['unblockstudent'] = 'Desbloquear alumno';
-$string['unblockuser'] = 'El usuario ya fue desbloqueado';
+$string['unblockuser'] = 'El usuario no se encuentra bloqueado';
 $string['usercharge'] = 'Usuario responsable';
 $string['userReserves'] = 'Reservas por usuario';
 $string['users'] = 'Usuarios';
@@ -317,6 +317,7 @@ $string['thecampisempty'] = 'El campo esta vacio ';
 $string['noblock'] = 'El usuario no esta bloqueado.';
 $string['noexist'] ='El usuario ingresado no existe.';
 $string['swap'] = 'intercambiar.';
+$string['empty'] = 'Es encesario rellenar el campo email.';
 
 
 ?>
