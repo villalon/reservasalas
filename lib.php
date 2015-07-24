@@ -93,7 +93,7 @@ function modulo_hora($unixtime, $factor = null){
 }
 
 function booking_availability($date){
-	global $DB,$USER;
+	global $DB,$USER,$CFG;
 	//format YYYY-MM-DD
 	$today = date('Y-m-d',time());
 	if( !$isbloked = $DB->get_record('reservasalas_bloqueados', array("alumno_id"=>$USER->id, 'estado'=>1))){
@@ -113,7 +113,7 @@ function booking_availability($date){
 		$books= array(count($weekBookings),$todayBookings);
 
 	}else{
-		$books = array(6,2);
+		$books = array($CFG->reservasSemana,$CFG->reservasDia);
 	}
 	return $books;
 }
