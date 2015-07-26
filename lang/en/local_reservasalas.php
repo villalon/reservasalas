@@ -97,7 +97,7 @@ $string['newresource'] = 'New resource';
 $string['next'] = 'Next';
 $string['notrooms'] = 'No rooms were found with that name';
 $string['notsendemail'] = 'There are problems sending reservation information to your email';
-$string['notuser'] = 'Username not registered';
+$string['notuser'] = 'Email not registered';
 $string['numbersofrooms'] = 'Number of rooms';
 $string['pcname'] = 'PC name';
 $string['places'] = 'Campus';
@@ -171,7 +171,7 @@ $string['uaiemail'] = 'UAI email';
 $string['unblock'] = 'Unblock';
 $string['unblockagain'] = 'Unblock student again';
 $string['unblockstudent'] = 'Unblock student';
-$string['unblockuser'] = 'User already unblocked';
+$string['unblockuser'] = 'The user is not block';
 $string['usercharge'] = 'User responsible';
 $string['userReserves'] = 'Reserve for user';
 $string['users'] = 'Users';
@@ -312,11 +312,11 @@ $string['havesentdetailsbook']="*We have sent the details to your email address 
 $string['problemsendingbookingdetails']="*There is a problem sending your booking details to your email";
 $string['roomcapacityacepted']= "The capacity of the room must be an integer(positive)";
 $string['reservemessage'] = 'Remember having 5 minutes before and 15 minutes after the start of your booking to confirm';
-$string['thecampisempty'] = 'The field is empty ';
+$string['thecampisempty'] = 'The field is empty';
 $string['noblock'] = 'The user is not block.';
 $string['noexist'] = 'The user dont exist.';
 $string['swap'] = 'swap.';
-
+$string['empty'] = 'Is needed to fill the email field';
 
 
 ?>
