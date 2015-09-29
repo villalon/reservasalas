@@ -22,6 +22,7 @@
  * @subpackage reservasalas
  * @copyright  2014 Francisco García Ralph (francisco.garcia.ralph@gmail.com)
  * 					Nicolás Bañados Valladares (nbanados@alumnos.uai.cl)
+ * @copyright  2015 Eduardo Aguirrebeña Zapata (eaguirrebena@alumnos.uai.cl)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -251,6 +252,8 @@ class tablas{
 
 
 	}
+	
+	
 	public static function misReservas($userid = null){
 		global $DB, $USER, $OUTPUT;
 
@@ -261,7 +264,10 @@ class tablas{
 		}
 
 		$table = new html_table();
-		$table->head = array(get_string('date', 'local_reservasalas'), get_string('campus', 'local_reservasalas'),get_string('building', 'local_reservasalas'), get_string('rooms', 'local_reservasalas'), get_string('module', 'local_reservasalas'), get_string('confirm', 'local_reservasalas'), get_string('cancel', 'local_reservasalas'));
+		$table->head = array(get_string('date', 'local_reservasalas'), get_string('campus', 'local_reservasalas'),
+				get_string('building', 'local_reservasalas'), get_string('rooms', 'local_reservasalas'),
+				get_string('module', 'local_reservasalas'), get_string('confirm', 'local_reservasalas'),
+				get_string('cancel', 'local_reservasalas'));
 		$reservas = $DB->get_records('reservasalas_reservas', array('alumno_id' => $user_id, 'activa' => '1'));
 		foreach ($reservas as $reserva) {
 				
@@ -279,41 +285,53 @@ class tablas{
 			$modulo = $DB->get_record('reservasalas_modulos', array('id'=>$reserva->modulo));
 
 			$horamodulo = hora_modulo($reserva->modulo);
+			$fecha=$reserva->fecha_reserva;
 			$tiempoactual=time();
+			$tiempoactual2=date('Y-m-d H:i:s',$tiempoactual);
 			$horainicio=$horamodulo[0];
 			$horafin=$horamodulo[1];
 			$horainicio =  $horainicio->modify('-5 minutes');
 			$antes=$horainicio->getTimestamp();
+			$antes1=date('Y-m-d H:i:s', $antes);
+			$antes2=date('H:i:s',$antes);
+			$antes3=$fecha.' '.$antes2;
 			$horainicio =  $horainicio->modify('+20 minutes');
 			$despues=$horainicio->getTimestamp();
+			$despues2=date('H:i:s',$despues);
+			$despues3=$fecha.' '.$despues2;
 			$horainicio =  $horainicio->modify('-80 minutes');
 			$horacancelar=$horainicio->getTimestamp();
+			$horacancelar2=date('H:i:s',$horacancelar);
+			$horacancelar3=$fecha.' '.$horacancelar2;
 			if($reserva->confirmado){
 				$confaction_reserva = 'Confirmado';
-			}else if($tiempoactual < $despues && $tiempoactual > $antes){ 
+			}else if($tiempoactual2 < $despues3 && $tiempoactual2 > $antes3){ 
 				$confurl_reserva = $con_url;
 				$conficon_reserva = new pix_icon('i/valid', get_string('confirm', 'local_reservasalas'));
 				$confaction_reserva = $OUTPUT->action_icon($confurl_reserva, $conficon_reserva);
-			}else if($tiempoactual>$despues && $reserva->confirmado == 0){
+			}else if($tiempoactual2 > $despues3 && $reserva->confirmado == 0){
 				$confaction_reserva = get_string('thetimetoconfirm', 'local_reservasalas');
 			}else{
 				$confaction_reserva = $OUTPUT->pix_icon('t/block',get_string('stillcannotconfirm', 'local_reservasalas'));
 			}
 				
-			if($tiempoactual < $horacancelar){
+			if($tiempoactual2 < $horacancelar3){
 				$delurl_reserva = $del_url;
 				$delicon_reserva = new pix_icon('i/invalid', get_string('cancel', 'local_reservasalas'));
 				$delaction_reserva = $OUTPUT->action_icon($delurl_reserva, $delicon_reserva, new confirm_action(get_string('areyousuretocancel', 'local_reservasalas')));
 			}else{
 				$delaction_reserva = get_string('timetocancel', 'local_reservasalas');
 			}
-
-				
-			$table->data[]=array($reserva->fecha_reserva,$sede->nombre,$edificio->nombre,$sala->nombre,$modulo->nombre_modulo."<br>(".$modulo->hora_inicio." - ".$modulo->hora_fin.")",$confaction_reserva,$delaction_reserva);;
+			
+			$table->data[]=array($reserva->fecha_reserva,$sede->nombre,$edificio->nombre,
+					$sala->nombre,$modulo->nombre_modulo."<br>(".$modulo->hora_inicio." - ".$modulo->hora_fin.")",
+					$confaction_reserva,$delaction_reserva);;
 				
 		}
+		
 		$table->align = array('center', 'center','center','center','center','center','center');
 		$table->size = array('12%', '16%','14%','14%','16%','14%','14%');
+		
 		return $table;
 	}
 
