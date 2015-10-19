@@ -68,6 +68,20 @@ h1 {
 	width: 35px;
 	
 }
+
+.Boton-deshabilitado {
+	height: 12px;
+	display: block;
+	margin: 0;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #a0a0a0;
+	border-radius: 3px;
+	font-size: 16pt;
+	background-color: #C0C0C0;
+	padding: 7px 7px;
+	width: 35px;
+}
+
 .Text-Box {
 	padding: 5px 4px;
 	border: 1px solid #ccc;
