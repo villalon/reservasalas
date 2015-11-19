@@ -80,7 +80,7 @@ function get_booking($type, $campusid,$date,$multiply,$size,$finaldate,$days,$fr
 	INNER JOIN {reservasalas_modulos} AS rm ON (rm.edificio_id = re.id AND rm.nombre_modulo not like '%B') 
 	LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1)
 	WHERE 1=1
-	$sqlfiltrocapacidad
+	
 	ORDER BY rs.id, rm.nombre_modulo ASC) AS disp
 	GROUP BY salaid, moduloid";
 	
