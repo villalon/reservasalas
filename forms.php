@@ -694,8 +694,8 @@ class formBuscarSalas extends moodleform {
 				'75-+' => '+75'
 				);
 		
-		$mform->addElement('select', 'size', get_string('capacity', 'local_reservasalas').': ', $options);
-		$mform->disabledIf('size', 'addmultiply', 'notchecked');
+		//$mform->addElement('select', 'size', get_string('capacity', 'local_reservasalas').': ', $options);
+		//$mform->disabledIf('size', 'addmultiply', 'notchecked');
 	    
 		}
 		$this->add_action_buttons(false, get_string('search', 'local_reservasalas'));
