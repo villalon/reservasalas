@@ -255,10 +255,10 @@ elseif($fromform->eventType!=0){
 	
 	echo html_writer::table($table);
 	if(has_capability('local/reservasalas:delete', $context)) {
-	echo'<input type="submit" name="action" value="remove" onClick="return ComfirmDeleteOrder();">';
+	echo'<input type="submit" name="action" value="' .get_string('remove', 'local_reservasalas'). '" onClick="return ComfirmDeleteOrder();">';
 	}
 	if(has_capability('local/reservasalas:changewith', $context)) {
-	echo'<input type="submit" name="action" value="swap">';
+	echo'<input type="submit" name="action" value="' .get_string('swap', 'local_reservasalas'). '">';
 	}
 	
 	echo html_writer::end_tag('form');

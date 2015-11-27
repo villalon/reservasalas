@@ -653,7 +653,7 @@ class formBuscarSalas extends moodleform {
 			}
 			
 		// Copy center instructions
-		$mform->addElement ( 'header', 'headeradvanced', get_string('advanceoptions', 'local_reservasalas'));
+		$mform->addElement ( 'header', 'headeradvanced', get_string('recurrenceoptions', 'local_reservasalas'));
 		$mform->setExpanded('headeradvanced', false);
 		
 			$mform->addElement('advcheckbox', 'addmultiply', get_string('activateadvanceoptions', 'local_reservasalas').': ');
@@ -662,27 +662,27 @@ class formBuscarSalas extends moodleform {
 		$mform->disabledIf('enddate', 'addmultiply', 'notchecked');
 		
 		$array = Array();
-		$array[]= $mform->createElement('advcheckbox', 'monday', '',get_string('monday', 'local_reservasalas'));
-		$array[]= $mform->createElement('advcheckbox', 'tuesday', '',get_string('tuesday', 'local_reservasalas'));
-		$array[]= $mform->createElement('advcheckbox', 'wednesday', '',get_string('wednesday', 'local_reservasalas'));
-		$array[]= $mform->createElement('advcheckbox', 'thursday', '',get_string('thursday', 'local_reservasalas'));
-		$array[]= $mform->createElement('advcheckbox', 'friday', '',get_string('friday', 'local_reservasalas'));
-		$array[]= $mform->createElement('advcheckbox', 'saturday', '',get_string('saturday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'monday', '',get_string('monday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'tuesday', '',get_string('tuesday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'wednesday', '',get_string('wednesday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'thursday', '',get_string('thursday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'friday', '',get_string('friday', 'local_reservasalas'));
+		$array[] = $mform->createElement('advcheckbox', 'saturday', '',get_string('saturday', 'local_reservasalas'));
 		
 		
 		
-		$mform->addGroup($array, 'ss', get_string('select','local_reservasalas'));
+		$mform->addGroup($array, 'ss', get_string('select', 'local_reservasalas'));
 		$mform->disabledIf('ss', 'addmultiply', 'notchecked');
 		
-		$selectArray=array();
+		$selectArray = array();
 		$options = array(
 				'1' => '1',
 				'2' => '2',
 				'3' => '3',
 				'4' => '4');
 		$selectArray[] = $mform->createElement('select', 'frequency', '', $options);
-		$selectArray[] =$mform->createElement('static', '', '',get_string('week','local_reservasalas'));
-		$mform->addGroup($selectArray, 'fr', get_string('frequency','local_reservasalas'));
+		$selectArray[] = $mform->createElement('static', '', '',get_string('week','local_reservasalas'));
+		$mform->addGroup($selectArray, 'fr', get_string('frequency', 'local_reservasalas'));
 		$mform->disabledIf('fr', 'addmultiply', 'notchecked');
 		
 		
