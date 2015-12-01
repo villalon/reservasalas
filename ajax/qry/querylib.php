@@ -21,6 +21,7 @@
 * @copyright 2012 Jorge Villalon <jorge.villalon@uai.cl>
 * @copyright 2014 Nicolas Perez <niperez@alumnos.uai.cl>
 * @copyright 2014 Carlos Villarroel <cavillarroel@alumnos.uai.cl>
+* @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
 * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 defined ( 'MOODLE_INTERNAL' ) || die ();
@@ -80,7 +81,7 @@ function get_booking($type, $campusid,$date,$multiply,$size,$finaldate,$days,$fr
 	INNER JOIN {reservasalas_modulos} AS rm ON (rm.edificio_id = re.id AND rm.nombre_modulo not like '%B') 
 	LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1)
 	WHERE 1=1
-	
+	$sqlfiltrocapacidad
 	ORDER BY rs.id, rm.nombre_modulo ASC) AS disp
 	GROUP BY salaid, moduloid";
 	
@@ -113,20 +114,22 @@ function days_calculator($date,$finalDate,$days,$frequency){
 		
 	$repetir = array ();
 	$diasArray = Array ();
+	$arrayDays = Array ();
 		
 	$arrayDays = str_split($days);
+	//var_dump($arrayDays);
 	
-	if (strpos($arrayDays, 'L') !== FALSE)
+	if (strpos($days, 'L') !== FALSE)
 		$arreglo [] = "monday";
-	if (strpos($arrayDays, 'M') !== FALSE)
+	if (strpos($days, 'M') !== FALSE)
 		$arreglo [] = "tuesday";
-	if (strpos($arrayDays, 'W') !== FALSE)
+	if (strpos($days, 'W') !== FALSE)
 		$arreglo [] = "wednesday";
-	if (strpos($arrayDays, 'J') !== FALSE)
+	if (strpos($days, 'J') !== FALSE)
 		$arreglo [] = "thursday";
-	if (strpos($arrayDays, 'V') !== FALSE)
+	if (strpos($days, 'V') !== FALSE)
 		$arreglo [] = "friday";
-	if (strpos($arrayDays, 'S') !== FALSE)
+	if (strpos($days, 'S') !== FALSE)
 		$arreglo [] = "saturday";
 	
 	$arrayCount = count ( $arreglo ) - 1;
@@ -142,8 +145,9 @@ function days_calculator($date,$finalDate,$days,$frequency){
 		$start = new DateTime ( $startDate );
 		
 		$end = clone $start;
-	
-		$start->modify ( $dow ); // Move to first occurence
+		
+		// Move to first occurence
+		$start->modify ( $dow ); 
 		
 		$dias = intval ( $dias );
 		
@@ -156,7 +160,6 @@ function days_calculator($date,$finalDate,$days,$frequency){
 			$repetir [] = $date->format ( 'Y-m-d' );
 		}
 	}
-	
 	
 	return $repetir;
 }
@@ -173,10 +176,10 @@ function send_mail($values,$error,$user,$asistentes,$eventname){
 	$message .= get_string('bookinginformation', 'local_reservasalas');
 	$message .= '<br></br>';
 	$message .= '<br></br>';
-	$message .= get_string('site', 'local_reservasalas').': ' . $campusId->nombre;
+	/*$message .= get_string('site', 'local_reservasalas').': ' . $campusId->nombre;
 	$message .= '<br></br>';
 	$message .= get_string('buildings', 'local_reservasalas').': ' . $buildingId->nombre;
-	$message .= '<br></br>';
+	$message .= '<br></br>';*/
 	$message .= get_string('roomtype', 'local_reservasalas').': Estudio';
 	$message .= '<br></br>';
 	$message .= get_string('event', 'local_reservasalas').': ' . $eventname;
@@ -212,5 +215,3 @@ function send_mail($values,$error,$user,$asistentes,$eventname){
 
 	
 }
-
-
