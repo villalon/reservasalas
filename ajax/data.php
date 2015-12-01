@@ -34,26 +34,26 @@ global $CFG, $DB, $OUTPUT, $PAGE, $USER;
 require_login();
 
 $action = required_param('action', PARAM_TEXT);
-$campusid=optional_param('campusid', 0, PARAM_INT);
-$type=optional_param('type', 0, PARAM_INT);
-$initialDate=optional_param('date', 1, PARAM_INT);
+$campusid = optional_param('campusid', 0, PARAM_INT);
+$type = optional_param('type', 0, PARAM_INT);
+$initialDate = optional_param('date', 1, PARAM_INT);
 //$rev=optional_param('rev', false, PARAM_BOOL);
-$multiply=optional_param('multiply', 0, PARAM_INT);
-$size=optional_param('size', 0, PARAM_TEXT);
-$userid=optional_param('userid', 0, PARAM_INT);
-$moduleid=optional_param('moduleid', null, PARAM_TEXT);
-$room=optional_param('room', null, PARAM_TEXT);
-$eventname=optional_param('name', null, PARAM_TEXT);
-$asistentes=optional_param('asistentes', 0, PARAM_INT);
-$finaldate=optional_param('finalDate', 1, PARAM_INT);
-$days=optional_param('days', null, PARAM_TEXT);
-$frequency=optional_param('frequency', 0, PARAM_INT);
-$inicio=optional_param('inicio', null, PARAM_TEXT);
-$termino=optional_param('termino', null, PARAM_TEXT);
-$nombresala=optional_param('nombresala', null, PARAM_TEXT);
-$nombremodulo=optional_param('nombremodulo', null, PARAM_TEXT);
+$multiply = optional_param('multiply', 0, PARAM_INT);
+$size = optional_param('size', 0, PARAM_TEXT);
+$userid = optional_param('userid', 0, PARAM_INT);
+$moduleid = optional_param('moduleid', null, PARAM_TEXT);
+$room = optional_param('room', null, PARAM_TEXT);
+$eventname = optional_param('name', null, PARAM_TEXT);
+$asistentes = optional_param('asistentes', 0, PARAM_INT);
+$finaldate = optional_param('finalDate', 1, PARAM_INT);
+$days = optional_param('days', null, PARAM_TEXT);
+$frequency = optional_param('frequency', 0, PARAM_INT);
+$inicio = optional_param('inicio', null, PARAM_TEXT);
+$termino = optional_param('termino', null, PARAM_TEXT);
+$nombresala = optional_param('nombresala', null, PARAM_TEXT);
+$nombremodulo = optional_param('nombremodulo', null, PARAM_TEXT);
 
-$resources=optional_param('resources', "prueba", PARAM_TEXT);
+$resources = optional_param('resources', "prueba", PARAM_TEXT);
 // Callback para from webpage
 $callback = optional_param ( 'callback', null, PARAM_RAW_TRIMMED );
 
@@ -76,7 +76,7 @@ if($action=="getbooking"){
 	$output2=$output;
 	$contador=0;
 
-	foreach ( $output as $disponibilidad) {
+	foreach ($output as $disponibilidad) {
 		if(!in_array($disponibilidad->moduloid, $agregados)){
 			$agregados[]=$disponibilidad->moduloid;
 			$modulos[]=array(
@@ -114,24 +114,25 @@ if($action=="getbooking"){
 				"horaFin"=>$disponibilidad->modulofin
 		);
 	}
-	$salas[] =array(
+	$salas[] = array(
 			"salaid"=>$salaid,
 			"nombresala"=>$nombresala,
 			"capacidad"=>$capacidad,
 			"disponibilidad"=>$ocupado
 	);
 
-	$final = Array(
+	$final = array(
 			"Modulos"=>$modulos,
-			"Salas"=>$salas);
-	$output=$final;
+			"Salas"=>$salas
+	);
+	$output = $final;
 	$jsonOutputs = array (
 			'error' => '',
 			'values' => $output
 	);
 }
 
-else if($action=="info"){
+else if($action == "info"){
 	// 0 = false, 1 = true
 	$isAdmin= 0;
 	if ( has_capability ( 'local/reservasalas:advancesearch', context_system::instance() )){
@@ -154,15 +155,15 @@ else if($action=="info"){
 
 }else if($action=="submission"){
 
-	$room=explode(",",$room);
-	$moduleid=explode(",",$moduleid);
-	$inicio=explode(",",$inicio);
-	$termino=explode(",",$termino);
-	$nombremodulo=explode(",",$nombremodulo);
-	$nombresala=explode(",",$nombresala);
+	$room = explode(",", $room);
+	$moduleid = explode(",", $moduleid);
+	$inicio = explode(",", $inicio);
+	$termino = explode(",", $termino);
+	$nombremodulo = explode(",", $nombremodulo);
+	$nombresala = explode(",", $nombresala);
 
-	$error= Array();
-	$values=Array();
+	$error = array();
+	$values = array();
 	if(!has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
 		list($weekBookings,$todayBookings) = booking_availability($initialDate);
 		if( $todayBookings == 2 
@@ -203,7 +204,7 @@ else if($action=="info"){
 							'nombremodulo'=>$nombremodulo[$i],
 							'inicio'=>$inicio[$i],
 							'termino'=>$termino[$i],
-							'fecha'=>$initialDate);
+							'fecha'=>$fecha);
 
 				}else{
 					$error[]=Array(
