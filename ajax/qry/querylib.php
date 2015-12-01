@@ -192,7 +192,9 @@ function send_mail($values, $error, $user, $asistentes, $eventname){
 	$message .= get_string('rooms', 'local_reservasalas').': ';
 	$message .= '<br></br>';
 	foreach($values as $value){
-		$day = $value["fecha"]->format("l");
+		$stamp = strtotime($value["fecha"]);
+		$day = date("l", $stamp);
+		
 		$message .= get_string('date', 'local_reservasalas').': ' .$day.' '.$value["fecha"] . ' - '.get_string('room', 'local_reservasalas').': ' .$value['nombresala'] . ' - '.get_string('module', 'local_reservasalas').': ' . $value['nombremodulo'];
 		$message .= '<br></br>';
 	}
