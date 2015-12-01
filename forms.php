@@ -633,7 +633,7 @@ class formBuscarSalas extends moodleform {
 		$mform->addElement ( 'header', 'headerdate', get_string('basicoptions', 'local_reservasalas'));
 		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ', array(
     					'startyear' => date('Y'), 
-    					'stopyear'  => date('Y')+2,
+    					'stopyear'  => date('Y')+2
 						));
 		$sedeedificio = array();
 		$edificios = $DB->get_records('reservasalas_edificios');
@@ -658,7 +658,10 @@ class formBuscarSalas extends moodleform {
 		
 			$mform->addElement('advcheckbox', 'addmultiply', get_string('activateadvanceoptions', 'local_reservasalas').': ');
 		
-			$mform->addElement('date_selector', 'enddate', get_string('enddate','local_reservasalas'));		
+			$mform->addElement('date_selector', 'enddate', get_string('enddate','local_reservasalas').': ', array(
+					'startyear' => date('Y'),
+					'stopyear' => date('Y')+2
+			));		
 		$mform->disabledIf('enddate', 'addmultiply', 'notchecked');
 		
 		$array = Array();
