@@ -178,10 +178,11 @@ else if($action == "info"){
 		$validation = true;
 	}
 	
-	for( $i=1; $i<count($room); $i++ ){
+	
 		if( $multiply==1 && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
 			$fechas=days_calculator($initialDate,$finaldate,$days,$frequency);
 			foreach ($fechas as $fecha){
+				for( $i=1; $i<count($room); $i++ ){
 				if(validation_booking($room[$i],$moduleid[$i],$fecha) ){
 					$time = time();
 					$data = array ();
