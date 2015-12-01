@@ -165,7 +165,7 @@ function days_calculator($date,$finalDate,$days,$frequency){
 	return $repetir;
 }
 
-function send_mail($values,$error,$user,$asistentes,$eventname){
+function send_mail($values, $error, $user, $asistentes, $eventname){
 	GLOBAL $USER;
 	$userfrom = core_user::get_noreply_user ();
 	$userfrom->maildisplay = true;
@@ -177,10 +177,10 @@ function send_mail($values,$error,$user,$asistentes,$eventname){
 	$message .= get_string('bookinginformation', 'local_reservasalas');
 	$message .= '<br></br>';
 	$message .= '<br></br>';
-	/*$message .= get_string('site', 'local_reservasalas').': ' . $campusId->nombre;
+	$message .= get_string('site', 'local_reservasalas').': ' . $campusId->nombre;
 	$message .= '<br></br>';
 	$message .= get_string('buildings', 'local_reservasalas').': ' . $buildingId->nombre;
-	$message .= '<br></br>';*/
+	$message .= '<br></br>';
 	$message .= get_string('roomtype', 'local_reservasalas').': Estudio';
 	$message .= '<br></br>';
 	$message .= get_string('event', 'local_reservasalas').': ' . $eventname;
@@ -192,7 +192,7 @@ function send_mail($values,$error,$user,$asistentes,$eventname){
 	$message .= get_string('rooms', 'local_reservasalas').': ';
 	$message .= '<br></br>';
 	foreach($values as $value){
-	$message .= get_string('date', 'local_reservasalas').': ' . date("Y-m-d",$value["fecha"]) . ' - '.get_string('room', 'local_reservasalas').': ' .$value['nombresala'] . ' - '.get_string('module', 'local_reservasalas').': ' . $value['nombremodulo'];
+	$message .= get_string('date', 'local_reservasalas').': ' . $value["fecha"] . ' - '.get_string('room', 'local_reservasalas').': ' .$value['nombresala'] . ' - '.get_string('module', 'local_reservasalas').': ' . $value['nombremodulo'];
 	$message .= '<br></br>';
 	}
 
