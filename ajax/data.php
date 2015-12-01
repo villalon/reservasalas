@@ -19,6 +19,7 @@
  * @package mod
  * @subpackage emarking
  * @copyright 2014 Jorge VillalÃ³n {@link http://www.uai.cl}, Francisco GarcÃ­a
+ * @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define('AJAX_SCRIPT', true);
@@ -69,6 +70,7 @@ if($action=="getbooking"){
 	$modulos = Array();
 	$salas = Array();
 	$ocupado=Array();
+	$agregados=Array();
 	$agregadosModulos=Array();
 	$agregadosSalas=Array();
 	$output2=$output;
@@ -179,10 +181,10 @@ else if($action=="info"){
 		if( $multiply==1 && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
 			$fechas=days_calculator($initialDate,$finaldate,$days,$frequency);
 			foreach ($fechas as $fecha){
-				if(validation_booking($room[$i],$moduleid[$i],$fecha)  ){
+				if(validation_booking($room[$i],$moduleid[$i],$fecha) ){
 					$time = time();
 					$data = array ();
-					$data ['fecha_reserva'] = $fecha[$i];
+					$data ['fecha_reserva'] = $fecha;
 					$data ['modulo'] = $moduleid[$i];
 					$data ['confirmado'] = 0;
 					$data ['activa'] = 1;
@@ -193,6 +195,7 @@ else if($action=="info"){
 					$data ['asistentes'] = $asistentes;
 					
 					$DB->insert_record ( 'reservasalas_reservas', $data );
+					
 					$values[]=Array(
 							'sala'=>$room[$i],
 							'nombresala'=>$nombresala[$i],
