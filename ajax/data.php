@@ -264,7 +264,7 @@ else if ($action == "info") {
 			'errors' => $error 
 	);
 	
-	send_mail($values, $error, $USER->id, $asistentes, $eventname);
+	send_mail($values, $error, $USER->id, $asistentes, $eventname, $campusid);
 	$jsonOutputs = array(
 			'error' => '',
 			'values' => $array 
