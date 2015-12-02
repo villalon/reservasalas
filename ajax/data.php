@@ -173,11 +173,11 @@ else if ($action == "info") {
 	} else {
 		$validation = true;
 	}
-	
-	$fechas = days_calculator($initialDate, $finaldate, $days, $frequency);
-	foreach ($fechas as $fecha) {
-		for($i = 1; $i < count($room); $i ++) {
-			if ($multiply == 1 && has_capability('local/reservasalas:advancesearch', context_system::instance())) {
+
+	for($i = 1; $i < count($room); $i ++) {
+		if ($multiply == 1 && has_capability('local/reservasalas:advancesearch', context_system::instance())) {
+			$fechas = days_calculator($initialDate, $finaldate, $days, $frequency);
+			foreach ($fechas as $fecha) {
 				if (validation_booking($room [$i], $moduleid [$i], $fecha)) {
 					$time = time();
 					$data = array();
@@ -213,48 +213,48 @@ else if ($action == "info") {
 							'fecha' => $initialDate 
 					);
 				}
-			} else {
+			}
+		} else {
 				
-				if (validation_booking($room [$i], $moduleid [$i], date('Y-m-d', $initialDate)) && $validation) {
-					$time = time();
-					$data = array();
-					$data['fecha_reserva'] = date('Y-m-d', $initialDate);
-					$data['modulo'] = $moduleid[$i];
-					$data['confirmado'] = 0;
-					$data['activa'] = 1;
-					$data['alumno_id'] = $USER->id;
-					$data['salas_id'] = $room[$i];
-					$data['fecha_creacion'] = $time;
-					$data['nombre_evento'] = $eventname;
-					$data['asistentes'] = $asistentes;
+			if (validation_booking($room [$i], $moduleid [$i], date('Y-m-d', $initialDate)) && $validation) {
+				$time = time();
+				$data = array();
+				$data['fecha_reserva'] = date('Y-m-d', $initialDate);
+				$data['modulo'] = $moduleid[$i];
+				$data['confirmado'] = 0;
+				$data['activa'] = 1;
+				$data['alumno_id'] = $USER->id;
+				$data['salas_id'] = $room[$i];
+				$data['fecha_creacion'] = $time;
+				$data['nombre_evento'] = $eventname;
+				$data['asistentes'] = $asistentes;
 					
-					$DB->insert_record('reservasalas_reservas', $data);
+				$DB->insert_record('reservasalas_reservas', $data);
 					
-					$jsonOutputs = array(
-							'error' => '',
-							'values' => 'ok' 
-					);
+				$jsonOutputs = array(
+						'error' => '',
+						'values' => 'ok' 
+				);
 					
-					$values[] = array(
-							'sala' => $room[$i],
-							'nombresala' => $nombresala[$i],
-							'modulo' => $moduleid[$i],
-							'nombremodulo' => $nombremodulo[$i],
-							'inicio' => $inicio[$i],
-							'termino' => $termino[$i],
-							'fecha' => $initialDate 
-					);
-				} else {
-					$error[] = array(
-							'sala' => $room[$i],
-							'nombresala' => $nombresala[$i],
-							'modulo' => $moduleid[$i],
-							'nombremodulo' => $nombremodulo[$i],
-							'inicio' => $inicio[$i],
-							'termino' => $termino[$i],
-							'fecha' => $initialDate 
-					);
-				}
+				$values[] = array(
+						'sala' => $room[$i],
+						'nombresala' => $nombresala[$i],
+						'modulo' => $moduleid[$i],
+						'nombremodulo' => $nombremodulo[$i],
+						'inicio' => $inicio[$i],
+						'termino' => $termino[$i],
+						'fecha' => $initialDate 
+				);
+			} else {
+				$error[] = array(
+						'sala' => $room[$i],
+						'nombresala' => $nombresala[$i],
+						'modulo' => $moduleid[$i],
+						'nombremodulo' => $nombremodulo[$i],
+						'inicio' => $inicio[$i],
+						'termino' => $termino[$i],
+						'fecha' => $initialDate 
+				);
 			}
 		}
 	}
