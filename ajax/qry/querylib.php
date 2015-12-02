@@ -16,55 +16,51 @@
 
 /**
  *
-* @package mod
-* @subpackage emarking
-* @copyright 2012 Jorge Villalon <jorge.villalon@uai.cl>
-* @copyright 2014 Nicolas Perez <niperez@alumnos.uai.cl>
-* @copyright 2014 Carlos Villarroel <cavillarroel@alumnos.uai.cl>
-* @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
-* @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
-defined ( 'MOODLE_INTERNAL' ) || die ();
+ * @package mod
+ * @subpackage emarking
+ * @copyright 2012 Jorge Villalon <jorge.villalon@uai.cl>
+ * @copyright 2014 Nicolas Perez <niperez@alumnos.uai.cl>
+ * @copyright 2014 Carlos Villarroel <cavillarroel@alumnos.uai.cl>
+ * @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
+ * @copyright 2015 Mark Michaelsen <mmichaelsen678@gmail.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *         
+ */
+defined ('MOODLE_INTERNAL') || die ();
 
 global $CFG;
-
 function get_modules($id) {
 	global $DB;
 	
-$data= $DB->get_records('reservasalas_modulos',array('edificio_id'=>$id));
-return $data;
-
+	$data = $DB->get_records('reservasalas_modulos', array(
+			'edificio_id' => $id 
+	));
+	return $data;
 }
-function get_booking($type, $campusid,$date,$multiply,$size,$finaldate,$days,$frequency) {
+function get_booking($type, $campusid, $date, $multiply, $size, $finaldate, $days, $frequency) {
 	global $DB;
-	
-	
 	
 	$sqlfiltrocapacidad = '';
 	if ($multiply == 1) {
 		
-		$fechas=days_calculator($date,$finaldate,$days,$frequency);
-		$fechasArray=Array();
-		foreach($fechas as $fecha){
-			$fechasArray[]="'".$fecha."'";
+		$fechas = days_calculator($date, $finaldate, $days, $frequency);
+		$fechasArray = array();
+		foreach ($fechas as $fecha) {
+			$fechasArray [] = "'" . $fecha . "'";
 		}
-		$date=implode( ",", $fechasArray );
-
+		$date = implode(",", $fechasArray);
+		
 		if ($size != '0') {
-			$sizePieces = explode ( "-", $size );
+			$sizePieces = explode ("-", $size);
 			if ($sizePieces [1] == "+") {
 				$sizePieces [1] = 1000;
 			}
-			$sqlfiltrocapacidad = "AND rs.capacidad BETWEEN $sizePieces[0] AND $sizePieces[1]";
-		
+			// $sqlfiltrocapacidad = "AND rs.capacidad BETWEEN $sizePieces[0] AND $sizePieces[1]";
 		}
-	}else{
-		$date="'".date ( 'Y-m-d', $date )."'";
-		
+	} else {
+		$date = "'" . date ('Y-m-d', $date) . "'";
 	}
-	$modulos = array ();
-	
-	
+	$modulos = array();
 	
 	$sqldisponibilidad = "SELECT salaid, salanombre, moduloid, modulonombre, moduloinicio, modulofin,capacidad , MAX(ocupada) as ocupada FROM (
 	SELECT rs.id AS salaid,
@@ -84,41 +80,35 @@ function get_booking($type, $campusid,$date,$multiply,$size,$finaldate,$days,$fr
 	
 	ORDER BY rs.id, rm.nombre_modulo ASC) AS disp
 	GROUP BY salaid, moduloid";
-	// $sqlfiltrocapacidad (línea 84)
+	// $sqlfiltrocapacidad (line 80)
 	
-	$data = $DB->get_recordset_sql ( $sqldisponibilidad );
+	$data = $DB->get_recordset_sql($sqldisponibilidad);
 	
 	return $data;
-
 }
-function validation_booking($room,$module,$date){
+function validation_booking($room, $module, $date) {
 	global $DB;
 	
-	
-	
-	if($DB->get_record('reservasalas_reservas',Array('salas_id'=>$room,'fecha_reserva'=>$date,'modulo'=>$module,'activa'=>1))){
+	if ($DB->get_record('reservasalas_reservas', array(
+			'salas_id' => $room,
+			'fecha_reserva' => $date,
+			'modulo' => $module,
+			'activa' => 1 
+	))) {
 		return false;
-		
-	}
-	else{
+	} else {
 		return true;
 	}
 }
-
-function days_calculator($date,$finalDate,$days,$frequency){
+function days_calculator($date, $finalDate, $days, $frequency) {
+	$fecha1 = mktime(0, 0, 0, date("m", $date), date("d", $date), date("Y", $date));
+	$fecha2 = mktime(0, 0, 0, date("m", $finalDate), date("d", $finalDate), date("Y", $finalDate));
 	
-	$fecha1 = mktime ( 0, 0, 0, date ( "m", $date ), date ( "d", $date ), date ( "Y", $date ) );
-	$fecha2 = mktime ( 0, 0, 0, date ( "m", $finalDate ), date ( "d", $finalDate ), date ( "Y", $finalDate ) );
-		
 	$diferencia = $fecha2 - $fecha1;
 	$dias = $diferencia / (60 * 60 * 24);
-		
-	$repetir = array ();
-	$diasArray = Array ();
-	$arrayDays = Array ();
-		
-	$arrayDays = str_split($days);
-	//var_dump($arrayDays);
+	
+	$repetir = array();
+	$diasArray = array();
 	
 	if (strpos($days, 'L') !== FALSE)
 		$arreglo [] = "monday";
@@ -133,89 +123,78 @@ function days_calculator($date,$finalDate,$days,$frequency){
 	if (strpos($days, 'S') !== FALSE)
 		$arreglo [] = "saturday";
 	
-	$arrayCount = count ( $arreglo ) - 1;
-	$startDate=date ( 'Y-m-d', $date );
+	$arrayCount = count($arreglo) - 1;
+	$startDate = date('Y-m-d', $date);
 	
-	
-	for($f = 0; $f <= $arrayCount; $f ++) {
+	for($f = 0; $f <= $arrayCount; $f++) {
 		$dow = $arreglo [$f];
-	
-		$step = $frequency;
-		$unit = 'W';
 		
-		$start = new DateTime ( $startDate );
+		$step = $frequency;
+		
+		$start = new DateTime($startDate);
 		
 		$end = clone $start;
 		
 		// Move to first occurence
-		$start->modify ( $dow ); 
+		$start->modify($dow);
 		
-		$dias = intval ( $dias );
+		$dias = intval($dias);
 		
-		$end->add ( new DateInterval ( 'P' . $dias . 'D' ) ); // Move to 1 year from start
-	
-		$interval = new DateInterval ( "P{$step}{$unit}" );
-		$period = new DatePeriod ( $start, $interval, $end );
-	
-		foreach ( $period as $date ) {
-			$repetir [] = $date->format ( 'Y-m-d' );
+		$end->add(new DateInterval('P' . $dias . 'D')); // Move to 1 year from start
+		
+		$interval = new DateInterval("P{$step}W");
+		$period = new DatePeriod($start, $interval, $end);
+		
+		foreach ($period as $date) {
+			$repetir [] = $date->format('Y-m-d');
 		}
 	}
 	
 	return $repetir;
 }
-
-function send_mail($values, $error, $user, $asistentes, $eventname){
+function send_mail($values, $error, $user, $asistentes, $eventname) {
 	GLOBAL $USER;
-	$userfrom = core_user::get_noreply_user ();
+	$userfrom = core_user::get_noreply_user();
 	$userfrom->maildisplay = true;
 	
-	
-	$message = get_string('dear', 'local_reservasalas'). $USER->firstname . ' ' . $USER->lastname . ': ';
+	$message = get_string('dear', 'local_reservasalas') . $USER->firstname . ' ' . $USER->lastname . ': ';
 	$message .= '<br></br>';
 	$message .= '<br></br>';
 	$message .= get_string('bookinginformation', 'local_reservasalas');
 	$message .= '<br></br>';
 	$message .= '<br></br>';
-	$message .= get_string('site', 'local_reservasalas').': ' . $campusId->nombre;
+	$message .= get_string('site', 'local_reservasalas') . ': ' . $campusId->nombre;
 	$message .= '<br></br>';
-	$message .= get_string('buildings', 'local_reservasalas').': ' . $buildingId->nombre;
+	$message .= get_string('buildings', 'local_reservasalas') . ': ' . $buildingId->nombre;
 	$message .= '<br></br>';
-	$message .= get_string('roomtype', 'local_reservasalas').': Estudio';
+	$message .= get_string('roomtype', 'local_reservasalas') . ': Estudio';
 	$message .= '<br></br>';
-	$message .= get_string('event', 'local_reservasalas').': ' . $eventname;
+	$message .= get_string('event', 'local_reservasalas') . ': ' . $eventname;
 	$message .= '<br></br>';
-	$message .= get_string('assistants', 'local_reservasalas').': ' . $asistentes;
+	$message .= get_string('assistants', 'local_reservasalas') . ': ' . $asistentes;
 	$message .= '<br></br>';
-	$message .= get_string('responsibility', 'local_reservasalas').': ' . $USER->firstname . ' ' . $USER->lastname;
+	$message .= get_string('responsibility', 'local_reservasalas') . ': ' . $USER->firstname . ' ' . $USER->lastname;
 	$message .= '<br></br>';
-	$message .= get_string('rooms', 'local_reservasalas').': ';
+	$message .= get_string('rooms', 'local_reservasalas') . ': ';
 	$message .= '<br></br>';
-	foreach($values as $value){
+	foreach ($values as $value) {
 		$stamp = strtotime($value["fecha"]);
 		$day = date("l", $stamp);
 		
-		$message .= get_string('date', 'local_reservasalas').': ' .$day.' '.$value["fecha"] . ' - '.get_string('room', 'local_reservasalas').': ' .$value['nombresala'] . ' - '.get_string('module', 'local_reservasalas').': ' . $value['nombremodulo'];
+		$message .= get_string('date', 'local_reservasalas') . ': ' . $day . ' ' . $value["fecha"] . ' - ' . get_string('room', 'local_reservasalas') . ': ' . $value['nombresala'] . ' - ' . get_string('module', 'local_reservasalas') . ': ' . $value['nombremodulo'];
 		$message .= '<br></br>';
 	}
-
-
 	
-	$eventdata = new stdClass ();
+	$eventdata = new stdClass();
 	$eventdata->component = 'local_reservasalas'; // your component name
 	$eventdata->name = 'reservenotification'; // this is the message name from messages.php
 	$eventdata->userfrom = $userfrom;
 	$eventdata->userto = $user;
 	$eventdata->subject = get_string('confirmationbooking', 'local_reservasalas');
-	$eventdata->fullmessage = format_text_email ( $message, FORMAT_HTML );
+	$eventdata->fullmessage = format_text_email($message, FORMAT_HTML);
 	$eventdata->fullmessageformat = FORMAT_HTML;
 	$eventdata->fullmessagehtml = '';
 	$eventdata->smallmessage = '';
 	$eventdata->notification = 1; // this is only set to 0 for personal messages between users
-	 message_send($eventdata);
-		
-		
-
-
-	
+	message_send($eventdata);
 }

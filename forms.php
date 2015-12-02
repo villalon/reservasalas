@@ -20,7 +20,8 @@
  * @package    local
  * @subpackage reservasalas
  * @copyright  2014 Francisco García Ralph (francisco.garcia.ralph@gmail.com)
- * 					Nicolás Bañados Valladares (nbanados@alumnos.uai.cl)
+ * @copyright  Nicolás Bañados Valladares (nbanados@alumnos.uai.cl)
+ * @copyright  2015 Mark Michaelsen <mmichaelsen678@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
@@ -634,7 +635,7 @@ class formBuscarSalas extends moodleform {
 		$mform->addElement('date_selector', 'fecha', get_string('date', 'local_reservasalas').': ', array(
     					'startyear' => date('Y'), 
     					'stopyear'  => date('Y') + 2
-						));
+		));
 		$sedeedificio = array();
 		$edificios = $DB->get_records('reservasalas_edificios');
 		$sedeedificio[0]=" ";
