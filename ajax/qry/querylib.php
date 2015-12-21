@@ -164,8 +164,8 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 	$userfrom = core_user::get_noreply_user();
 	$userfrom->maildisplay = true;
 	
-	$campusname = $DB->get_recordl("reservasalas_sedes", array("id"=>$campusid));
-	$buildingname = $DB->get_recordl("reservasalas_edificios", array("sedes_id"=>$campusid));
+	$campusname = $DB->get_record("reservasalas_sedes", array("id"=>$campusid));
+	$buildingname = $DB->get_record("reservasalas_edificios", array("sedes_id"=>$campusid));
 	
 	$message = get_string("dear", "local_reservasalas") . $USER->firstname . " " . $USER->lastname . ": \n \n";
 	$message .= get_string("bookinginformation", "local_reservasalas") . "\n \n";
