@@ -256,7 +256,7 @@ else if($action == "info"){
 			"error" => "",
 			"values" => $valuesArray
 	);
-	//echo  "".$campusid."<br>";
+	echo  "**".$campusid."**";
 	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
 }
 
