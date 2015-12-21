@@ -137,6 +137,8 @@ else if($action == "info"){
 			"values" => $infoUser
 	);
 }else if($action == "submission"){
+	
+	$campusid = optional_param("campusid", 0, PARAM_INT);
 	$room = explode(",",$room);
 	$moduleid = explode(",",$moduleid);
 	$start = explode(",",$start);
