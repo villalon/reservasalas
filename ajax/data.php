@@ -245,9 +245,7 @@ else if($action == "info"){
 		}
 	}
 	
-	if( $DB->insert_records("reservasalas_reservas", $reservation) ){
-		reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
-	}
+	$DB->insert_records("reservasalas_reservas", $reservation);
 	
 	$valuesArray = array(
 			"well" => $values,
@@ -258,7 +256,10 @@ else if($action == "info"){
 			"error" => "",
 			"values" => $valuesArray
 	);
+	
+	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
 }
+
 $jsonOutput = json_encode ( $jsonOutputs );
 if ($callback){
 	$jsonOutput = $callback . "(" . $jsonOutput . ");";
