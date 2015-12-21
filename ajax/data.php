@@ -138,7 +138,7 @@ else if($action == "info"){
 	);
 }else if($action == "submission"){
 	
-	$campusid = requiere_param("campusid", 0, PARAM_INT);
+	$campusid = required_param("campusid", 0, PARAM_INT);
 	$room = explode(",",$room);
 	$moduleid = explode(",",$moduleid);
 	$start = explode(",",$start);
