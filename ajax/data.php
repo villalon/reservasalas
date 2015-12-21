@@ -33,7 +33,6 @@ $action = required_param("action", PARAM_TEXT);
 $campusid = optional_param("campusid", 0, PARAM_INT);
 $type = optional_param("type", 0, PARAM_INT);
 $initialDate = optional_param("date", 1, PARAM_INT);
-// $rev = optional_param("rev", false, PARAM_BOOL);
 $multiply = optional_param("multiply", 0, PARAM_INT);
 $size = optional_param("size", 0, PARAM_TEXT);
 $userid = optional_param("userid", 0, PARAM_INT);

@@ -166,7 +166,7 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 	
 	$sql = "SELECT s.nombre as sedenombre, e.nombre as edificionombre
 			FROM {reservasalas_edificios} AS e JOIN {reservasalas_sedes} AS s ON (e.sedes_id = s.id)
-			WHERE s.id = ?";
+			WHERE e.id = ?";
 	
 	$names = $DB->get_record_sql($sql, array($buildingid));
 	
