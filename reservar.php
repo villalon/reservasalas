@@ -119,7 +119,7 @@ if ($fromform = $form_buscar->get_data ()) {
  			endDate = "<?php echo $fromform->enddate; ?>"
  			selectDays = "<?php echo $days; ?>"
  			weeklyFrequencyBookings = "<?php echo $fromform->fr['frequency']; ?>"
- 			advOptions = "<?php echo $fromform->addmultiply; ?>" >
+ 			advOptions = "<?php echo $fromform->addmultiply; ?>" 
 		</div>
 		
 		<?php 

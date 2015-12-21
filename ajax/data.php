@@ -245,18 +245,21 @@ else if($action == "info"){
 		}
 	}
 	
-	$DB->insert_records ("reservasalas_reservas", $reservation );
+	if( $DB->insert_records("reservasalas_reservas", $reservation) ){
+		reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
+	}
+	
 	$valuesArray = array(
 			"well" => $values,
 			"errors" => $error
 	);
-	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
+	
 	$jsonOutputs = array (
 			"error" => "",
 			"values" => $valuesArray
 	);
 }
-$jsonOutput=json_encode ( $jsonOutputs );
+$jsonOutput = json_encode ( $jsonOutputs );
 if ($callback){
 	$jsonOutput = $callback . "(" . $jsonOutput . ");";
 }
