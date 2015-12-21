@@ -21,8 +21,8 @@
  * @copyright 2015 Mark Michaelsen <mmichaelsen678@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-//define("AJAX_SCRIPT", true);
-//define("NO_DEBUG_DISPLAY", true);
+define("AJAX_SCRIPT", true);
+define("NO_DEBUG_DISPLAY", true);
 require_once(dirname(dirname(dirname(dirname(__FILE__))))."/config.php");
 require_once("qry/querylib.php");
 require_once ($CFG->dirroot . "/local/reservasalas/lib.php");
@@ -138,7 +138,7 @@ else if($action == "info"){
 	);
 }else if($action == "submission"){
 	
-	$campusid = optional_param("campusid", 0, PARAM_INT);
+	$campusid = requiere_param("campusid", 0, PARAM_INT);
 	$room = explode(",",$room);
 	$moduleid = explode(",",$moduleid);
 	$start = explode(",",$start);
@@ -256,7 +256,7 @@ else if($action == "info"){
 			"error" => "",
 			"values" => $valuesArray
 	);
-	echo  "**".$campusid."**";
+	
 	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
 }
 
