@@ -184,7 +184,6 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 	$message .= get_string("assistants", "local_reservasalas") . ": " . $asistentes . "\n";
 	$message .= get_string("responsibility", "local_reservasalas") . ": " . $USER->firstname . " " . $USER->lastname . "\n";
 	$message .= get_string("rooms", "local_reservasalas") . ": \n";
-	$message .= "El id del edificio es ". $buildingid .": \n";
 	
 	foreach ($values as $value) {
 		$stamp = strtotime($value["fecha"]);
