@@ -159,23 +159,18 @@ function reservasalas_daysCalculator($date, $finalDate, $days, $frequency) {
 	
 	return $repeat;
 }
-function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, $campusId) {
+function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, $campusid) {
 	GLOBAL $USER, $DB;
 	$userfrom = core_user::get_noreply_user();
 	$userfrom->maildisplay = true;
 	
-	$sql = "SELECT e.nombre AS edificio, 
-			s.nombre AS sede
-			FROM {reservasalas_edificios} AS e, 
-			{reservasalas_sedes} AS s 
-			WHERE e.sedes_id = s.id
-			AND e.id = ?";
-	$campus = $DB->get_record_sql($sql, array($campusId));
+	$campusname = $DB->get_recordl("reservasalas_sedes", array("id"=>$campusid));
+	$buildingname= $DB->get_recordl("reservasalas_edificios", array("sedes_id"=>$campusid));
 	
 	$message = get_string("dear", "local_reservasalas") . $USER->firstname . " " . $USER->lastname . ": \n \n";
 	$message .= get_string("bookinginformation", "local_reservasalas") . "\n \n";
-	$message .= get_string("site", "local_reservasalas") . ": " . $campus->sede . "\n";
-	$message .= get_string("buildings", "local_reservasalas") . ": " . $campus->edificio . "\n";
+	$message .= get_string("site", "local_reservasalas") . ": " . $campusname->name . "\n";
+	$message .= get_string("buildings", "local_reservasalas") . ": " . $buildingname-name . "\n";
 	$message .= get_string("roomtype", "local_reservasalas") . ": Estudio \n";
 	$message .= get_string("event", "local_reservasalas") . ": " . $eventname . "\n";
 	$message .= get_string("assistants", "local_reservasalas") . ": " . $asistentes . "\n";
@@ -185,7 +180,7 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 		$stamp = strtotime($value["fecha"]);
 		$day = date("l", $stamp);
 		
-		$message .= get_string("date", "local_reservasalas") . ": " . $day . " " . $value["fecha"] . " - " 
+		$message .= get_string("date", "local_reservasalas") . ": " . $day . " " . date("Y-m-d",$value["fecha"]) . " - " 
 				. get_string("room", "local_reservasalas") . ": " . $value["nombresala"] . " - " 
 				. get_string("module", "local_reservasalas") . ": " . $value["nombremodulo"] . "\n";
 	}
