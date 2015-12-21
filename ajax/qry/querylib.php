@@ -159,23 +159,27 @@ function reservasalas_daysCalculator($date, $finalDate, $days, $frequency) {
 	
 	return $repeat;
 }
-function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, $campusid) {
+function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, $buildingid) {
 	GLOBAL $USER, $DB;
 	$userfrom = core_user::get_noreply_user();
 	$userfrom->maildisplay = true;
 	
-	$campusname = $DB->get_record("reservasalas_sedes", array("id"=>$campusid));
-	$buildingname = $DB->get_record("reservasalas_edificios", array("sedes_id"=>$campusid));
+	$sql = "SELECT s.nombre as sedenombre, e.nombre as edificionombre
+			FROM {reservasalas_edificios} AS e JOIN {reservasalas_sedes} AS s ON (e.sedes_id = s.id)
+			WHERE s.id = ?";
+	
+	$names = $DB->get_record_sql($sql, array($buildingid));
 	
 	$message = get_string("dear", "local_reservasalas") . $USER->firstname . " " . $USER->lastname . ": \n \n";
 	$message .= get_string("bookinginformation", "local_reservasalas") . "\n \n";
-	$message .= get_string("site", "local_reservasalas") . ": " . $campusname->nombre . "\n";
-	$message .= get_string("buildings", "local_reservasalas") . ": " . $buildingname->nombre . "\n";
+	$message .= get_string("site", "local_reservasalas") . ": " . $names->sedenombre . "\n";
+	$message .= get_string("buildings", "local_reservasalas") . ": " . $names->edificionombre . "\n";
 	$message .= get_string("roomtype", "local_reservasalas") . ": Estudio \n";
 	$message .= get_string("event", "local_reservasalas") . ": " . $eventname . "\n";
 	$message .= get_string("assistants", "local_reservasalas") . ": " . $asistentes . "\n";
 	$message .= get_string("responsibility", "local_reservasalas") . ": " . $USER->firstname . " " . $USER->lastname . "\n";
 	$message .= get_string("rooms", "local_reservasalas") . ": \n";
+	
 	foreach ($values as $value) {
 		$stamp = strtotime($value["fecha"]);
 		$day = date("l", $stamp);
