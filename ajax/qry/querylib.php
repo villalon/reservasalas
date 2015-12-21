@@ -180,7 +180,7 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 		$stamp = strtotime($value["fecha"]);
 		$day = date("l", $stamp);
 		
-		$message .= get_string("date", "local_reservasalas") . ": " . $day . " " . date("Y-m-d",$value["fecha"]) . " - " 
+		$message .= get_string("date", "local_reservasalas") . ": " . $day . " " . $value["fecha"] . " - " 
 				. get_string("room", "local_reservasalas") . ": " . $value["nombresala"] . " - " 
 				. get_string("module", "local_reservasalas") . ": " . $value["nombremodulo"] . "\n";
 	}
