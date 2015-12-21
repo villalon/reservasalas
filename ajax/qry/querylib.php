@@ -164,16 +164,21 @@ function reservasalas_sendMail($values, $error, $user, $asistentes, $eventname, 
 	$userfrom = core_user::get_noreply_user();
 	$userfrom->maildisplay = true;
 	
-	$sql = "SELECT s.nombre as sedenombre, e.nombre as edificionombre
-			FROM {reservasalas_edificios} AS e JOIN {reservasalas_sedes} AS s ON (e.sedes_id = s.id)
-			WHERE e.id = ?";
-	
-	$names = $DB->get_record_sql($sql, array($buildingid));
-	
 	$message = get_string("dear", "local_reservasalas") . $USER->firstname . " " . $USER->lastname . ": \n \n";
-	$message .= get_string("bookinginformation", "local_reservasalas") . "\n \n";
-	$message .= get_string("site", "local_reservasalas") . ": " . $names->sedenombre . "\n";
-	$message .= get_string("buildings", "local_reservasalas") . ": " . $names->edificionombre . "\n";
+	
+	if($buildingid>0){
+		
+		$sql = "SELECT s.nombre as sedenombre, e.nombre as edificionombre
+				FROM {reservasalas_edificios} AS e JOIN {reservasalas_sedes} AS s ON (e.sedes_id = s.id)
+				WHERE e.id = ?";
+		
+		$names = $DB->get_record_sql($sql, array($buildingid));
+	
+		$message .= get_string("bookinginformation", "local_reservasalas") . "\n \n";
+		$message .= get_string("site", "local_reservasalas") . ": " . $names->sedenombre . "\n";
+		$message .= get_string("buildings", "local_reservasalas") . ": " . $names->edificionombre . "\n";
+	}
+	
 	$message .= get_string("roomtype", "local_reservasalas") . ": Estudio \n";
 	$message .= get_string("event", "local_reservasalas") . ": " . $eventname . "\n";
 	$message .= get_string("assistants", "local_reservasalas") . ": " . $asistentes . "\n";

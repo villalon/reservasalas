@@ -138,7 +138,7 @@ else if($action == "info"){
 	);
 }else if($action == "submission"){
 	
-	$campusid = required_param("campusid", 0, PARAM_INT);
+	$campusid = required_param("campusid", PARAM_INT);
 	$room = explode(",",$room);
 	$moduleid = explode(",",$moduleid);
 	$start = explode(",",$start);
@@ -252,12 +252,13 @@ else if($action == "info"){
 			"errors" => $error
 	);
 	
+	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
+	
 	$jsonOutputs = array (
 			"error" => "",
 			"values" => $valuesArray
 	);
 	
-	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
 }
 
 $jsonOutput = json_encode ( $jsonOutputs );
