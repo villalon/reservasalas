@@ -1,6 +1,6 @@
 /** Add css rules here for your application. */
 /** Example rules used by the template application (remove for your app) */
-h1 {
+.title{
 	font-size: 2em;
 	font-weight: bold;
 	color: #777777;
@@ -8,13 +8,13 @@ h1 {
 	text-align: center;
 }
 
-.gwt-Button {
+.button{
 	display: block;
 	font-size: 16pt;
 	padding: 5px 7px;
 }
 
-.Boton-marco{
+.buttonframe{
 	text-align: center;
 	width: 35px;
 	height: 15px;
@@ -27,8 +27,7 @@ h1 {
 	margin: 0;
 }
 
-
-.Boton-ocupado {
+.button-taken{
 	height: 12px;
 	display: block;
 	margin: 0;
@@ -42,20 +41,19 @@ h1 {
 	
 }
 
-
-.Boton-ocupado-down {
+.button-taken-down{
 	background-color: #B12020;
 }
 
-.Boton-ocupado-down-hovering {
+.button-taken-down-hovering{
 	background-color: #B12020;
 }
 
-.Boton-ocupado-up-hovering {
+.button-taken-up-hovering{
 	background-color: #FF0000;
 }
 
-.Boton-ocupado-nulo {
+.buttontakennull {
 	height: 12px;
 	display: block;
 	margin: 0;
@@ -69,7 +67,7 @@ h1 {
 	
 }
 
-.Boton-deshabilitado {
+.buttonempty {
 	height: 12px;
 	display: block;
 	margin: 0;
@@ -82,7 +80,7 @@ h1 {
 	width: 35px;
 }
 
-.Text-Box {
+.textbox{
 	padding: 5px 4px;
 	border: 1px solid #ccc;
 	border-top: 1px solid #999;
@@ -91,7 +89,7 @@ h1 {
 	border-radius: 10px;
 }
 
-.Text-Box-vacio {
+.textboxempty{
 	background: #F59595;
 	padding: 5px 4px;
 	border: 1px solid #ccc;
@@ -101,7 +99,7 @@ h1 {
 	border-radius: 10px;
 }
 
-.Boton-disponible {
+.buttonavaible {
 	height: 12px;
 	display: block;
 	margin: 0;
@@ -114,20 +112,20 @@ h1 {
 	width: 35px;
 }
 
-
-.Boton-disponible-down {
+.buttonavaible-down {
 	background-color: #53A82B;
 }
 
-.Boton-disponible-down-hovering {
+.buttonavaible-down-hovering {
 	background-color: #53A82B;
 }
 
-.Boton-disponible-up-hovering {
+.buttonavaible-up-hovering {
 	background-color: #51FD00;
 }
+
 /** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
+.dialogbox {
 	width: 400px;
 }
 
@@ -135,15 +133,16 @@ h1 {
 	margin: 5 px;
 }
 
-.serverResponseLabelError {
+.serverresponselabelerror {
 	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
+.closebutton {
 	margin: 15px 6px 6px;
 }
 
-
-
-
+.dietip{
+	hight: 10px; 
+	width: 53px;
+}
