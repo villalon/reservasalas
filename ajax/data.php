@@ -23,6 +23,7 @@
  */
 define("AJAX_SCRIPT", true);
 define("NO_DEBUG_DISPLAY", true);
+
 require_once(dirname(dirname(dirname(dirname(__FILE__))))."/config.php");
 require_once("qry/querylib.php");
 require_once ($CFG->dirroot . "/local/reservasalas/lib.php");
@@ -251,13 +252,13 @@ else if($action == "info"){
 			"errors" => $error
 	);
 
+	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
+	
 	$jsonOutputs = array (
 			"error" => "",
 			"values" => $valuesArray
 	);
-	
-	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
-	
+
 }
 
 $jsonOutput = json_encode ( $jsonOutputs );
