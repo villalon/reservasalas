@@ -720,32 +720,25 @@ class formBuscarSalas extends moodleform {
 		$errors=array();
 
 		// Verifica que la fecha del formulario sea al menos hoy
-		if($data['fecha']<$today->getTimestamp()){
-			$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');
-		
+		if( $data['fecha']<$today->getTimestamp()){
+			
+			$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');	
 		}
 	
 		// Verifica que la fecha solicitada no sea en Domingo	
-		if(date('N',$data['fecha'])==7) {
+		if(date('N',$data['fecha']) == 7) {
 			
-			$errors['fecha'] = get_string('cannotreservesunday', 'local_reservasalas');
-			
+			$errors['fecha'] = get_string('cannotreservesunday', 'local_reservasalas');			
 		}
 		
-		
-		
+			
 		if(!(has_capability('local/reservasalas:libreryrules', context_system::instance()))){
 			// Si no es biblioteca verifica que no reserve mas alla de 7 dias adelante
 			if($data['fecha']>$week->getTimestamp()){
 				$errors['fecha'] = get_string('checkthedate', 'local_reservasalas');
 			
-			}
-			
-			
+			}		
 		}
-
-		
-		
 		
 		if(has_capability('local/reservasalas:typeroom', context_system::instance())){
 			if($data['roomstype']==0){
@@ -775,60 +768,61 @@ class formBuscarSalas extends moodleform {
 		
 		if(has_capability('local/reservasalas:advancesearch', context_system::instance())){
 			
-			$diasArray=$data['ss'];
-			$fecha1=mktime(0,0,0,date("m", $data['fecha']),date("d", $data['fecha']),date("Y", $data['fecha']));
-			$fecha2=mktime(0,0,0,date("m", $data['enddate']),date("d", $data['enddate']),date("Y", $data['enddate']));
+			$diasArray = $data['ss'];
+			$fecha1 = mktime(0,0,0,date("m", $data['fecha']),date("d", $data['fecha']),date("Y", $data['fecha']));
+			$fecha2 = mktime(0,0,0,date("m", $data['enddate']),date("d", $data['enddate']),date("Y", $data['enddate']));
 			
-			$diferencia=$fecha2-$fecha1;
-			$dias=$diferencia/(60*60*24);
+			$diferencia = $fecha2-$fecha1;
+			$dias = $diferencia/(60*60*24);
+			
 			if($data['SedeEdificio']==0){
 				$errors['SedeEdificio'] = get_string('selectbuilding', 'local_reservasalas');
 					
 			}
 			else if(has_capability('local/reservasalas:typeroom', context_system::instance())){
 			
-			if(!$DB->get_records('reservasalas_salas', array('edificios_id'=>$data['SedeEdificio'],'tipo'=>$data['roomstype']))){
-				$errors['SedeEdificio'] = get_string('arenotrooms', 'local_reservasalas');
-			}
+				if(!$DB->get_records('reservasalas_salas', array('edificios_id'=>$data['SedeEdificio'],'tipo'=>$data['roomstype']))){
+					$errors['SedeEdificio'] = get_string('arenotrooms', 'local_reservasalas');
+				}
 			}else if(!$DB->get_records('reservasalas_modulos', array('edificio_id'=>$data['SedeEdificio']))){
 				$errors['SedeEdificio'] = get_string('arenotmodules', 'local_reservasalas');
 					
 			}
 			
-			
-			
-			
-		if($data['addmultiply']==1){
-			if($diasArray['monday']==0 && $diasArray['tuesday']==0 && $diasArray['wednesday']==0 && $diasArray['thursday']== 0 &&
-			$diasArray['friday']==0 && $diasArray['saturday']==0 && $diasArray['sunday']==0){
+	
+			if($data['addmultiply']==1){
 				
-				$errors['ss'] = get_string('selectatleastoneday', 'local_reservasalas');
-			}else if($dias < 7){
-				$param=false;
-				for($i=0;$i<=$dias;$i++){					
-					$siguiente = strtotime('+'.$i.' day',$data['fecha']);	
-								
-					$dia_siguiente = strtolower(date("l",$siguiente));
+				if($diasArray['monday']==0 && $diasArray['tuesday']==0 && $diasArray['wednesday']==0 && $diasArray['thursday']== 0 &&
+				$diasArray['friday']==0 && $diasArray['saturday']==0 ){
 					
-								
-					if($diasArray[$dia_siguiente] == 1){
-						$i=$dias+1;
-						$param=true;
+					$errors['ss'] = get_string('selectatleastoneday', 'local_reservasalas');
+				}else if($dias < 7){
+					$param=false;
+					for($i=0;$i<=$dias;$i++){					
+						$siguiente = strtotime('+'.$i.' day',$data['fecha']);	
+									
+						$dia_siguiente = strtolower(date("l",$siguiente));
+						
+									
+						if($diasArray[$dia_siguiente] == 1){
+							$i=$dias+1;
+							$param=true;
+						}	
+					}
+					if($param==false){					
+						$errors['ss'] = get_string('checkthedays', 'local_reservasalas');
 					}	
 				}
-				if($param==false){					
-					$errors['ss'] = get_string('checkthedays', 'local_reservasalas');
-				}	
-			}
-			if($data['enddate']<$data['fecha']|| $data['fecha']==$data['enddate']){
-				$errors['enddate'] = get_string('checkthedate', 'local_reservasalas');
 				
+				if($data['enddate'] < $data['fecha'] ){
+
+					$errors['enddate'] = get_string('checkthedate', 'local_reservasalas');
+					
+				}
 			}
-	}
  
 		}
 
-	
 		return $errors;
 	}
 }
