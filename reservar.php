@@ -47,10 +47,13 @@ echo $OUTPUT->header ();
 echo $OUTPUT->heading ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 
 
-$form_buscar = new formBuscarSalas ( null );
-echo $form_buscar->display ();
+$form_buscar = new formBuscarSalas();
 
-if ($fromform = $form_buscar->get_data ()) {	
+if ($form_buscar->is_cancelled()) {
+
+	redirect($baseurl);
+
+} else if ($fromform = $form_buscar->get_data ()) {	
 		if (! has_capability ( 'local/reservasalas:typeroom', context_system::instance () )) {
 			//roomtype = {1: class room, 2: study room, 3: reunion room}
 			$fromform->roomstype = 2;
@@ -119,9 +122,11 @@ if ($fromform = $form_buscar->get_data ()) {
  			endDate = "<?php echo $fromform->enddate; ?>"
  			selectDays = "<?php echo $days; ?>"
  			weeklyFrequencyBookings = "<?php echo $fromform->fr['frequency']; ?>"
- 			advOptions = "<?php echo $fromform->addmultiply; ?>" >
+ 			advOptions = "<?php echo $fromform->addmultiply; ?>" 
 		</div>
 		
 		<?php 
 }
+
+echo $form_buscar->display ();
 echo $OUTPUT->footer (); 

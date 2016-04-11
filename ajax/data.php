@@ -1,5 +1,4 @@
 <?php 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,154 +13,141 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
  * @package mod
  * @subpackage emarking
- * @copyright 2014 Jorge VillalÃ³n {@link http://www.uai.cl}, Francisco GarcÃ­a
+ * @copyright 2014 Jorge Villalón {@link http://www.uai.cl}, Francisco García
+ * @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
+ * @copyright 2015 Mark Michaelsen <mmichaelsen678@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define('AJAX_SCRIPT', true);
-define('NO_DEBUG_DISPLAY', true);
+define("AJAX_SCRIPT", true);
+define("NO_DEBUG_DISPLAY", true);
 
-require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once('qry/querylib.php');
-require_once ($CFG->dirroot . '/local/reservasalas/lib.php');
-
-global $CFG, $DB, $OUTPUT, $PAGE, $USER;
-
+require_once(dirname(dirname(dirname(dirname(__FILE__))))."/config.php");
+require_once("qry/querylib.php");
+require_once ($CFG->dirroot . "/local/reservasalas/lib.php");
+global $CFG, $DB, $OUTPUT, $USER;
 require_login();
 
-$action = required_param('action', PARAM_TEXT);
-$campusid=optional_param('campusid', 0, PARAM_INT);
-$type=optional_param('type', 0, PARAM_INT);
-$initialDate=optional_param('date', 1, PARAM_INT);
-//$rev=optional_param('rev', false, PARAM_BOOL);
-$multiply=optional_param('multiply', 0, PARAM_INT);
-$size=optional_param('size', 0, PARAM_TEXT);
-$userid=optional_param('userid', 0, PARAM_INT);
-$moduleid=optional_param('moduleid', null, PARAM_TEXT);
-$room=optional_param('room', null, PARAM_TEXT);
-$eventname=optional_param('name', null, PARAM_TEXT);
-$asistentes=optional_param('asistentes', 0, PARAM_INT);
-$finaldate=optional_param('finalDate', 1, PARAM_INT);
-$days=optional_param('days', null, PARAM_TEXT);
-$frequency=optional_param('frequency', 0, PARAM_INT);
-$inicio=optional_param('inicio', null, PARAM_TEXT);
-$termino=optional_param('termino', null, PARAM_TEXT);
-$nombresala=optional_param('nombresala', null, PARAM_TEXT);
-$nombremodulo=optional_param('nombremodulo', null, PARAM_TEXT);
+$action = required_param("action", PARAM_TEXT);
+$campusid = optional_param("campusid", 0, PARAM_INT);
+$type = optional_param("type", 0, PARAM_INT);
+$initialDate = optional_param("date", 1, PARAM_INT);
+$multiply = optional_param("multiply", 0, PARAM_INT);
+$size = optional_param("size", 0, PARAM_TEXT);
+$userid = optional_param("userid", 0, PARAM_INT);
+$moduleid = optional_param("moduleid", null, PARAM_TEXT);
+$room = optional_param("room", null, PARAM_TEXT);
+$eventname = optional_param("name", null, PARAM_TEXT);
+$assistants = optional_param("asistentes", 0, PARAM_INT);
+$enddate = optional_param("finalDate", 1, PARAM_INT);
+$days = optional_param("days", null, PARAM_TEXT);
+$frequency = optional_param("frequency", 0, PARAM_INT);
+$start = optional_param("inicio", null, PARAM_TEXT);
+$finish = optional_param("termino", null, PARAM_TEXT);
+$roomname = optional_param("nombresala", null, PARAM_TEXT);
+$modulename = optional_param("nombremodulo", null, PARAM_TEXT);
+$resources = optional_param("resources", "prueba", PARAM_TEXT);
 
-$resources=optional_param('resources', "prueba", PARAM_TEXT);
 // Callback para from webpage
-$callback = optional_param ( 'callback', null, PARAM_RAW_TRIMMED );
+$callback = optional_param ( "callback", null, PARAM_RAW_TRIMMED );
 
 // Headers
-header ( 'Content-Type: text/javascript' );
-header ( 'Cache-Control: no-cache' );
-header ( 'Pragma: no-cache' );
+header ( "Content-Type: text/javascript" );
+header ( "Cache-Control: no-cache" );
+header ( "Pragma: no-cache" );
 
-if($action=="getbooking"){
-
-	$output = get_booking($type, $campusid, $initialDate, $multiply, $size,$finaldate,$days,$frequency);
-
-	$disponible=Array();
-	$modulos = Array();
-	$salas = Array();
-	$ocupado=Array();
-	$agregadosModulos=Array();
-	$agregadosSalas=Array();
-	$output2=$output;
-	$contador=0;
-
-	foreach ( $output as $disponibilidad) {
-		if(!in_array($disponibilidad->moduloid, $agregados)){
-			$agregados[]=$disponibilidad->moduloid;
-			$modulos[]=array(
-				"id"=>$disponibilidad->moduloid,
-				"name"=>$disponibilidad->modulonombre,
-				"horaInicio"=>$disponibilidad->moduloinicio,
-				"horaFin"=>$disponibilidad->modulofin
+if($action == "getbooking"){
+	$output = reservasalas_getBooking($type, $campusid, $initialDate, $multiply, $size, $enddate, $days, $frequency);
+	$available = array();
+	$modules = array();
+	$rooms = array();
+	$roombusy = array();
+	$added = array();
+	$modulesadded = array();
+	$roomsadded = array();
+	$contador = 0;
+	foreach ($output as $availability) {
+		if(!in_array($availability->moduloid, $added)){
+			$added[] = $availability->moduloid;
+			$modules[] = array(
+				"id" => $availability->moduloid,
+				"name" => $availability->modulonombre,
+				"horaInicio" => $availability->moduloinicio,
+				"horaFin" => $availability->modulofin
 			);
 		}
 		if($contador > 0){
-			if($anterior!=$disponibilidad->salaid){
-				$salas[] =array(
-						"salaid"=>$salaid,
-						"nombresala"=>$nombresala,
-						"capacidad"=>$capacidad,
-						"disponibilidad"=>$ocupado
+			if($anterior != $availability->salaid){
+				$rooms[] = array(
+						"salaid" => $salaid,
+						"nombresala" => $roomname,
+						"capacidad" => $capacidad,
+						"disponibilidad" => $roombusy
 				);
-				$ocupado=Array();
+				$roombusy = array();
 			}
 		}
-
 		$contador++;
-		if(!in_array($disponibilidad->salaid, $agregadosSalas)){
-			$anterior=$disponibilidad->salaid;
-			$agregadosSalas[]=$disponibilidad->salaid;
-			$salaid=$disponibilidad->salaid;
-			$nombresala=$disponibilidad->salanombre;
-			$capacidad=$disponibilidad->capacidad;
+		if(!in_array($availability->salaid, $roomsadded)){
+			$anterior = $availability->salaid;
+			$roomsadded[] = $availability->salaid;
+			$salaid = $availability->salaid;
+			$roomname = $availability->salanombre;
+			$capacidad = $availability->capacidad;
 		}
-		$ocupado[]=Array(
-				"moduloid"=>$disponibilidad->moduloid,
-				"modulonombre"=>$disponibilidad->modulonombre,
-				"ocupada"=>$disponibilidad->ocupada,
-				"horaInicio"=>$disponibilidad->moduloinicio,
-				"horaFin"=>$disponibilidad->modulofin
+		$roombusy[] = array(
+				"moduloid" => $availability->moduloid,
+				"modulonombre" => $availability->modulonombre,
+				"ocupada" => $availability->ocupada,
+				"horaInicio" => $availability->moduloinicio,
+				"horaFin" => $availability->modulofin
 		);
 	}
-	$salas[] =array(
-			"salaid"=>$salaid,
-			"nombresala"=>$nombresala,
-			"capacidad"=>$capacidad,
-			"disponibilidad"=>$ocupado
+	$rooms[] = array(
+			"salaid" => $salaid,
+			"nombresala" => $roomname,
+			"capacidad" => $capacidad,
+			"disponibilidad" => $roombusy
 	);
-
-	$final = Array(
-			"Modulos"=>$modulos,
-			"Salas"=>$salas);
-	$output=$final;
+	$final = array(
+			"Modulos" => $modules,
+			"Salas" => $rooms
+	);
+	$output = $final;
 	$jsonOutputs = array (
-			'error' => '',
-			'values' => $output
+			"error" => "",
+			"values" => $output
 	);
 }
-
-else if($action=="info"){
+else if($action == "info"){
 	// 0 = false, 1 = true
-	$isAdmin= 0;
-	if ( has_capability ( 'local/reservasalas:advancesearch', context_system::instance() )){
-		$isAdmin= 1;
+	$isAdmin = 0;
+	if ( has_capability ( "local/reservasalas:advancesearch", context_system::instance() )){
+		$isAdmin = 1;
 	}
-
-
-	$infoUser=Array(
-			"firstname"=>$USER->firstname,
-			"lastname"=>$USER->lastname,
-			"email"=>$USER->email,
-			"isAdmin"=> "$isAdmin"
-
+	$infoUser = array(
+			"firstname" => $USER->firstname,
+			"lastname" => $USER->lastname,
+			"email" => $USER->email,
+			"isAdmin" => $isAdmin
 	);
-
 	$jsonOutputs = array (
-			'error' => '',
-			'values' => $infoUser
+			"error" => "",
+			"values" => $infoUser
 	);
+}else if($action == "submission"){
 
-}else if($action=="submission"){
-
-	$room=explode(",",$room);
-	$moduleid=explode(",",$moduleid);
-	$inicio=explode(",",$inicio);
-	$termino=explode(",",$termino);
-	$nombremodulo=explode(",",$nombremodulo);
-	$nombresala=explode(",",$nombresala);
-
-	$error= Array();
-	$values=Array();
-	if(!has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
+	$room = explode(",",$room);
+	$moduleid = explode(",",$moduleid);
+	$start = explode(",",$start);
+	$finish = explode(",",$finish);
+	$modulename = explode(",",$modulename);
+	$roomname = explode(",",$roomname);
+	$error= array();
+	$values = array();
+	if(!has_capability ( "local/reservasalas:advancesearch", context_system::instance () )){
 		list($weekBookings,$todayBookings) = booking_availability($initialDate);
 		if( $todayBookings == 2 
 				|| count($room)>3 
@@ -174,103 +160,109 @@ else if($action=="info"){
 	}else{
 		$validation = true;
 	}
-	
-	for( $i=1; $i<count($room); $i++ ){
-		if( $multiply==1 && has_capability ( 'local/reservasalas:advancesearch', context_system::instance () )){
-			$fechas=days_calculator($initialDate,$finaldate,$days,$frequency);
+	$reservation = array ();
+	for( $counter = 1; $counter < count($room); $counter++ ){
+		if( $multiply == 1 && has_capability ( "local/reservasalas:advancesearch", context_system::instance () )){
+			//calculate all the dates from reserves rooms (Y-m-d)
+			$fechas = reservasalas_daysCalculator($initialDate,$enddate,$days,$frequency);
 			foreach ($fechas as $fecha){
-				if(validation_booking($room[$i],$moduleid[$i],$fecha)  ){
+				if(reservasalas_validationBooking($room[$counter],$moduleid[$counter],$fecha) ){
 					$time = time();
 					$data = array ();
-					$data ['fecha_reserva'] = $fecha[$i];
-					$data ['modulo'] = $moduleid[$i];
-					$data ['confirmado'] = 0;
-					$data ['activa'] = 1;
-					$data ['alumno_id'] = $USER->id;
-					$data ['salas_id'] = $room[$i];
-					$data ['fecha_creacion'] = $time;
-					$data ['nombre_evento'] = $eventname;
-					$data ['asistentes'] = $asistentes;
+					$data ["fecha_reserva"] = $fecha;
+					$data ["modulo"] = $moduleid[$counter];
+					$data ["confirmado"] = 0;
+					$data ["activa"] = 1;
+					$data ["alumno_id"] = $USER->id;
+					$data ["salas_id"] = $room[$counter];
+					$data ["fecha_creacion"] = $time;
+					$data ["nombre_evento"] = $eventname;
+					$data ["asistentes"] = $assistants;
 					
-					$DB->insert_record ( 'reservasalas_reservas', $data );
-					$values[]=Array(
-							'sala'=>$room[$i],
-							'nombresala'=>$nombresala[$i],
-							'modulo'=>$moduleid[$i],
-							'nombremodulo'=>$nombremodulo[$i],
-							'inicio'=>$inicio[$i],
-							'termino'=>$termino[$i],
-							'fecha'=>$initialDate);
-
+					array_push($reservation,$data);
+					
+					
+					$values[]=array(
+							"sala" => $room[$counter],
+							"nombresala" => $roomname[$counter],
+							"modulo" => $moduleid[$counter],
+							"nombremodulo" => $modulename[$counter],
+							"inicio" => $start[$counter],
+							"termino" => $finish[$counter],
+							"fecha" => $fecha
+					);
 				}else{
-					$error[]=Array(
-							'sala'=>$room[$i],
-							'nombresala'=>$nombresala[$i],
-							'modulo'=>$moduleid[$i],
-							'nombremodulo'=>$nombremodulo[$i],
-							'inicio'=>$inicio[$i],
-							'termino'=>$termino[$i],
-							'fecha'=>$initialDate);
+					$error[] = array(
+							"sala" => $room[$counter],
+							"nombresala" => $roomname[$counter],
+							"modulo" => $moduleid[$counter],
+							"nombremodulo" => $modulename[$counter],
+							"inicio" => $start[$counter],
+							"termino" => $finish[$counter],
+							"fecha" => $fecha
+					);
 				}
 			}
-
 		}else{
-
-			if( validation_booking($room[$i],$moduleid[$i],date('Y-m-d',$initialDate)) && $validation){
+			if( reservasalas_validationBooking($room[$counter],$moduleid[$counter],date("Y-m-d",$initialDate)) && $validation){
 				$time = time();
 				$data = array ();
-				$data ['fecha_reserva'] = date ( 'Y-m-d', $initialDate );
-				$data ['modulo'] = $moduleid[$i];
-				$data ['confirmado'] = 0;
-				$data ['activa'] = 1;
-				$data ['alumno_id'] = $USER->id;
-				$data ['salas_id'] = $room[$i];
-				$data ['fecha_creacion'] = $time;
-				$data ['nombre_evento'] = $eventname;
-				$data ['asistentes'] = $asistentes;
-
-				$DB->insert_record ( 'reservasalas_reservas', $data );
-
+				$data ["fecha_reserva"] = date ( "Y-m-d", $initialDate );
+				$data ["modulo"] = $moduleid[$counter];
+				$data ["confirmado"] = 0;
+				$data ["activa"] = 1;
+				$data ["alumno_id"] = $USER->id;
+				$data ["salas_id"] = $room[$counter];
+				$data ["fecha_creacion"] = $time;
+				$data ["nombre_evento"] = $eventname;
+				$data ["asistentes"] = $assistants;
+				
+				array_push($reservation,$data);
 				$jsonOutputs = array (
-						'error' => '',
-						'values' => 'ok'
+						"error" => "",
+						"values" => "ok"
 				);
-
-				$values[]=Array(
-						'sala'=>$room[$i],
-						'nombresala'=>$nombresala[$i],
-						'modulo'=>$moduleid[$i],
-						'nombremodulo'=>$nombremodulo[$i],
-						'inicio'=>$inicio[$i],
-						'termino'=>$termino[$i],
-						'fecha'=>$initialDate);
+				$values[]=array(
+						"sala" => $room[$counter],
+						"nombresala" => $roomname[$counter],
+						"modulo" => $moduleid[$counter],
+						"nombremodulo" => $modulename[$counter],
+						"inicio" => $start[$counter],
+						"termino" => $finish[$counter],
+						"fecha" => $initialDate
+				);
 			}else{
-				$error[]=Array(
-						'sala'=>$room[$i],
-						'nombresala'=>$nombresala[$i],
-						'modulo'=>$moduleid[$i],
-						'nombremodulo'=>$nombremodulo[$i],
-						'inicio'=>$inicio[$i],
-						'termino'=>$termino[$i],
-						'fecha'=>$initialDate);
-					
+				$error[]=array(
+						"sala" => $room[$counter],
+						"nombresala" => $roomname[$counter],
+						"modulo" => $moduleid[$counter],
+						"nombremodulo" => $modulename[$counter],
+						"inicio" => $start[$counter],
+						"termino" => $finish[$counter],
+						"fecha" => $initialDate
+				);
 			}
 		}
 	}
-
-	$array=array('well'=>$values,'errors'=>$error);
-
-	send_mail($values,$error,$USER->id,$asistentes,$eventname);
-	$jsonOutputs = array (
-			'error' => '',
-			'values' => $array
+	
+	$DB->insert_records("reservasalas_reservas", $reservation);
+	
+	$valuesArray = array(
+			"well" => $values,
+			"errors" => $error
 	);
+
+	reservasalas_sendMail($values, $error, $USER->id, $assistants, $eventname, $campusid);
+	
+	$jsonOutputs = array (
+			"error" => "",
+			"values" => $valuesArray
+	);
+
 }
 
-
-$jsonOutput=json_encode ( $jsonOutputs );
-
-if ($callback)
+$jsonOutput = json_encode ( $jsonOutputs );
+if ($callback){
 	$jsonOutput = $callback . "(" . $jsonOutput . ");";
-
+}
 echo $jsonOutput;
