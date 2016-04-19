@@ -528,7 +528,6 @@ function xmldb_local_reservasalas_upgrade($oldversion) {
     	upgrade_plugin_savepoint(true, 2014081201, 'local', 'reservasalas');
     }
     
-    
     if ($oldversion < 2016041801) {
     
     	// Define key modulo (foreign) to be added to reservasalas_reservas.
@@ -541,7 +540,7 @@ function xmldb_local_reservasalas_upgrade($oldversion) {
     	// Reservasalas savepoint reached.
     	upgrade_plugin_savepoint(true, 2016041801, 'local', 'reservasalas');
     }
-    
+
     
 	return true;
 }

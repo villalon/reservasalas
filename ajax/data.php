@@ -107,6 +107,9 @@ if($action == "getbooking"){
 				"horaFin" => $availability->modulofin
 		);
 	}
+	
+	$output->close();
+	
 	$rooms[] = array(
 			"salaid" => $salaid,
 			"nombresala" => $roomname,

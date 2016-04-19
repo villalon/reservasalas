@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/reservasalas/db" VERSION="20160418" COMMENT="XMLDB file for Moodle local/reservasalas"
+<XMLDB PATH="local/reservasalas/db" VERSION="20160419" COMMENT="XMLDB file for Moodle local/reservasalas"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -57,7 +57,6 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="salas_id" TYPE="foreign" FIELDS="salas_id" REFTABLE="reservasalas_salas" REFFIELDS="id"/>
-        <KEY NAME="modulo" TYPE="foreign" FIELDS="modulo" REFTABLE="reservasalas_modulos" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="reservasalas_bloqueados" COMMENT="tabla creada para tener el registro de los bloqueos de alumnos">

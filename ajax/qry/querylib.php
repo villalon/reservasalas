@@ -77,8 +77,8 @@ function reservasalas_getBooking($type, $campusid, $date, $multiply, $size, $fin
 		LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1) 
 		ORDER BY rs.id, rm.nombre_modulo ASC) AS disp 
 	GROUP BY salaid, moduloid";
-	
-	$data = $DB->get_records_sql($sqlDisponibility, array($type, $campusid));
+
+	$data = $DB->get_recordset_sql($sqlDisponibility, array($type, $campusid));
 	
 	return $data;
 }
