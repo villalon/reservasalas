@@ -16,7 +16,9 @@
 /**
  * @package mod
  * @subpackage emarking
- * @copyright 2014 Jorge Villalón {@link http://www.uai.cl}, Francisco García
+ * @copyright 2014 Jorge Villalón {@link http://www.uai.cl}
+ * @copyright 2014 Francisco García
+ * @copyright 2015 Hans Jeria <hansjeria@gmail.com>
  * @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
  * @copyright 2015 Mark Michaelsen <mmichaelsen678@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

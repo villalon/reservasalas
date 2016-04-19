@@ -21,6 +21,7 @@
  * @copyright 2012 Jorge Villalon <jorge.villalon@uai.cl>
  * @copyright 2014 Nicolas Perez <niperez@alumnos.uai.cl>
  * @copyright 2014 Carlos Villarroel <cavillarroel@alumnos.uai.cl>
+ * @copyright 2015 Hans Jeria <hansjeria@gmail.com>
  * @copyright 2015 Eduardo Aguirrebeña <eaguirrebena@alumnos.uai.cl>
  * @copyright 2015 Mark Michaelsen <mmichaelsen678@gmail.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -60,24 +61,24 @@ function reservasalas_getBooking($type, $campusid, $date, $multiply, $size, $fin
 		$date = "'" . date ("Y-m-d", $date) . "'";
 	}
 	
-	$sqlDisponibility = "SELECT salaid, salanombre, moduloid, modulonombre, moduloinicio, modulofin,capacidad , MAX(ocupada) as ocupada FROM (
-	SELECT rs.id AS salaid, 
-	rs.nombre AS salanombre, 
-	rs.capacidad as capacidad, 
-	rm.id AS moduloid, 
-	rm.nombre_modulo as modulonombre, 
-	rm.hora_inicio as moduloinicio, 
-	rm.hora_fin as modulofin, 
-	rr.activa as status, 
-	CASE WHEN rr.id IS NULL THEN 0 ELSE 1 END AS ocupada 
-	FROM {reservasalas_salas} AS rs 
-	INNER JOIN {reservasalas_edificios} AS re ON (re.id = rs.edificios_id AND rs.tipo = ? AND re.id = ?) 
-	INNER JOIN {reservasalas_modulos} AS rm ON (rm.edificio_id = re.id AND rm.nombre_modulo not like '%B') 
-	LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1) 
-	ORDER BY rs.id, rm.nombre_modulo ASC) AS disp 
+	$sqlDisponibility = "SELECT salaid, salanombre, moduloid, modulonombre, moduloinicio, modulofin,capacidad , MAX(ocupada) as ocupada 
+	FROM (
+		SELECT rs.id AS salaid, 
+		rs.nombre AS salanombre, 
+		rs.capacidad as capacidad, 
+		rm.id AS moduloid, 
+		rm.nombre_modulo as modulonombre, 
+		rm.hora_inicio as moduloinicio, 
+		rm.hora_fin as modulofin, 
+		rr.activa as status, 
+		CASE WHEN rr.id IS NULL THEN 0 ELSE 1 END AS ocupada 
+		FROM {reservasalas_salas} AS rs 
+		INNER JOIN {reservasalas_modulos} AS rm ON (rm.edificio_id = rs.edificios_id AND rs.tipo = ? AND rs.edificios_id = ? AND rm.nombre_modulo not like '%B') 
+		LEFT JOIN {reservasalas_reservas} AS rr ON (rr.salas_id = rs.id AND rr.modulo = rm.id AND rr.fecha_reserva IN ($date) AND rr.activa=1) 
+		ORDER BY rs.id, rm.nombre_modulo ASC) AS disp 
 	GROUP BY salaid, moduloid";
 	
-	$data = $DB->get_recordset_sql($sqlDisponibility, array($type, $campusid));
+	$data = $DB->get_records_sql($sqlDisponibility, array($type, $campusid));
 	
 	return $data;
 }

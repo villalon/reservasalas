@@ -529,7 +529,18 @@ function xmldb_local_reservasalas_upgrade($oldversion) {
     }
     
     
-   
+    if ($oldversion < 2016041801) {
+    
+    	// Define key modulo (foreign) to be added to reservasalas_reservas.
+    	$table = new xmldb_table('reservasalas_reservas');
+    	$key = new xmldb_key('modulo', XMLDB_KEY_FOREIGN, array('modulo'), 'reservasalas_modulos', array('id'));
+    
+    	// Launch add key modulo.
+    	$dbman->add_key($table, $key);
+    
+    	// Reservasalas savepoint reached.
+    	upgrade_plugin_savepoint(true, 2016041801, 'local', 'reservasalas');
+    }
     
     
 	return true;
