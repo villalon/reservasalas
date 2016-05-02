@@ -49,6 +49,8 @@ echo $OUTPUT->heading ( get_string ( 'reserveroom', 'local_reservasalas' ) );
 
 $form_buscar = new formBuscarSalas();
 
+echo $form_buscar->display ();
+
 if ($form_buscar->is_cancelled()) {
 
 	redirect($baseurl);
@@ -122,11 +124,11 @@ if ($form_buscar->is_cancelled()) {
  			endDate = "<?php echo $fromform->enddate; ?>"
  			selectDays = "<?php echo $days; ?>"
  			weeklyFrequencyBookings = "<?php echo $fromform->fr['frequency']; ?>"
- 			advOptions = "<?php echo $fromform->addmultiply; ?>" 
+ 			advOptions = "<?php echo $fromform->addmultiply; ?>" >
 		</div>
 		
 		<?php 
 }
 
-echo $form_buscar->display ();
+
 echo $OUTPUT->footer (); 
